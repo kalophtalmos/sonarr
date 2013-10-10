@@ -5,7 +5,6 @@ define(
         'marionette',
         'System/Info/SystemInfoLayout',
         'System/Logs/LogsLayout',
-        'System/Update/UpdateLayout',
         'Commands/CommandController'
     ], function (Backbone,
                  Marionette,
@@ -29,11 +28,11 @@ define(
             },
 
             events: {
-                'click .x-info-tab'   : '_showInfo',
-                'click .x-logs-tab'   : '_showLogs',
-                'click .x-updates-tab': '_showUpdates',
-                'click .x-shutdown'   : '_shutdown',
-                'click .x-restart'    : '_restart'
+                'click .x-info-tab'    : '_showInfo',
+                'click .x-logs-tab'    : '_showLogs',
+                'click .x-updates-tab' : '_showUpdates',
+                'click .x-shutdown'    : '_shutdown',
+                'click .x-restart'     : '_restart'
             },
 
             initialize: function (options) {

@@ -31,6 +31,15 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             }
         }
 
+        public override IEnumerable<string> MovieRecentFeed
+        {
+            get
+            {
+                yield return String.Format("http://rss.omgwtfnzbs.org/rss-search.php?catid=19,20&user={0}&api={1}&eng=1",
+                                Settings.Username, Settings.ApiKey);
+            }
+        }
+
         public override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber)
         {
             var searchUrls = new List<string>();
@@ -65,6 +74,13 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             }
 
             return searchUrls;
+        }
+
+        
+
+        public override IEnumerable<string> GetMovieSearchUrls(string movieTitle, string imdbId)
+        {
+            throw new NotImplementedException();
         }
 
         public override IEnumerable<string> GetSearchUrls(string query, int offset)

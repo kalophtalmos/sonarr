@@ -23,4 +23,24 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
             Rejections = rejections.ToList();
         }
     }
+
+    public class ImportMovieDecision
+    {
+        public LocalMovie LocalMovie { get; private set; }
+        public IEnumerable<string> Rejections { get; private set; }
+
+        public bool Approved
+        {
+            get
+            {
+                return !Rejections.Any();
+            }
+        }
+
+        public ImportMovieDecision(LocalMovie localMovie,params string[] rejections)
+        {
+            LocalMovie = localMovie;
+            Rejections = rejections;
+        }
+    }
 }

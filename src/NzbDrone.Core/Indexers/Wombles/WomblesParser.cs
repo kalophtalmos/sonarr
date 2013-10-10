@@ -13,5 +13,15 @@ namespace NzbDrone.Core.Indexers.Wombles
         {
             return 0;
         }
+
+        protected override int GetImdbId(XElement item)
+        {
+            return 0;
+        }
+
+        protected override int GetTvdbId(XElement item)
+        {
+            return 0;
+        }
     }
 }

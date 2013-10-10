@@ -56,6 +56,11 @@ namespace NzbDrone.Core.Download.Clients.Sabnzbd
             }
         }
 
+        public override void DownloadNzb(RemoteMovie remoteMovie)
+        {
+            throw new NotImplementedException();
+        }
+
         public override IEnumerable<QueueItem> GetQueue()
         {
             return _queueCache.Get("queue", () =>

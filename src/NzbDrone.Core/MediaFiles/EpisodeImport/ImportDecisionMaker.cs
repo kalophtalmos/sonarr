@@ -5,6 +5,7 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.DecisionEngine;
+using NzbDrone.Core.Movies;
 using NzbDrone.Core.Parser;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
@@ -126,5 +127,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
             return null;
         }
+
+
     }
 }

@@ -17,4 +17,14 @@ namespace NzbDrone.Core.MediaFiles.Events
             OldFiles = oldFiles;
         }
     }
+
+    public class MovieDownloadedEvent : IEvent
+    {
+        public LocalMovie Movie { get; private set; }
+
+        public MovieDownloadedEvent(LocalMovie movie)
+        {
+            Movie = movie;
+        }
+    }
 }

@@ -11,7 +11,10 @@ namespace NzbDrone.Core.Configuration
         void SaveConfigDictionary(Dictionary<string, object> configValues);
 
         //Download Client
+        String SabMovieCategory { get; set; }
         String DownloadedEpisodesFolder { get; set; }
+        String DownloadedMoviesFolder { get; set; }
+        Int32 MovieRssSyncInterval { get; set; }
         String DownloadClientWorkingFolders { get; set; }
         Int32 DownloadedEpisodesScanInterval { get; set; }
 

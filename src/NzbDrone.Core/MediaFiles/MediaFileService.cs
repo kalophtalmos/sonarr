@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Movies.Events;
 using NzbDrone.Core.Tv.Events;
 using NzbDrone.Common;
 
@@ -10,6 +12,7 @@ namespace NzbDrone.Core.MediaFiles
 {
     public interface IMediaFileService
     {
+        MovieFile Add(MovieFile movieFile);
         EpisodeFile Add(EpisodeFile episodeFile);
         void Update(EpisodeFile episodeFile);
         void Delete(EpisodeFile episodeFile, bool forUpgrade = false);
@@ -24,13 +27,22 @@ namespace NzbDrone.Core.MediaFiles
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly IMediaFileRepository _mediaFileRepository;
+        private readonly IMovieMediaFileRepository _movieMediaFileRepository;
         private readonly Logger _logger;
 
-        public MediaFileService(IMediaFileRepository mediaFileRepository, IEventAggregator eventAggregator, Logger logger)
+        public MediaFileService(IMediaFileRepository mediaFileRepository,IMovieMediaFileRepository movieMediaFileRepository, IEventAggregator eventAggregator, Logger logger)
         {
             _mediaFileRepository = mediaFileRepository;
+            _movieMediaFileRepository = movieMediaFileRepository;
             _eventAggregator = eventAggregator;
             _logger = logger;
+        }
+
+        public MovieFile Add(MovieFile movieFile)
+        {
+            var addFile = _movieMediaFileRepository.Insert(movieFile);
+            _eventAggregator.PublishEvent(new MovieFileAddedEvent(addFile));
+            return addFile;
         }
 
         public EpisodeFile Add(EpisodeFile episodeFile)

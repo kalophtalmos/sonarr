@@ -61,6 +61,9 @@ namespace NzbDrone.Core.Test.MediaFiles
             Mocker.GetMock<IParsingService>().Verify(c => c.GetSeries("foldername"), Times.Once());
         }
 
+
+
+
         [Test]
         public void should_skip_import_if_dropfolder_doesnt_exist()
         {
@@ -117,6 +120,8 @@ namespace NzbDrone.Core.Test.MediaFiles
 
             ExceptionVerification.ExpectedWarns(1);
         }
+
+
 
         [Test]
         public void should_not_delete_folder_if_no_files_were_imported()

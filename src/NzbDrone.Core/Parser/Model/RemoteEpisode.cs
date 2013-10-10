@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NzbDrone.Core.Movies;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.Parser.Model
@@ -17,6 +18,19 @@ namespace NzbDrone.Core.Parser.Model
         {
             return Episodes.Any(e => e.AirDateUtc >= DateTime.UtcNow.Date.AddDays(-14));
         }
+
+        public override string ToString()
+        {
+            return Release.Title;
+        }
+    }
+
+    public class RemoteMovie
+    {
+        public ReleaseInfo Release { get; set; }
+        public ParsedMovieInfo ParsedMovieInfo { get; set; }
+        public Movie Movie { get; set; }
+        public Boolean DownloadAllowed { get; set; }
 
         public override string ToString()
         {

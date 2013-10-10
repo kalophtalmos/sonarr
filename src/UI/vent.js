@@ -11,8 +11,9 @@ define(
             SeriesAdded       : 'series:added',
             SeriesDeleted     : 'series:deleted',
             CommandComplete   : 'command:complete',
-            ServerUpdated     : 'server:updated',
-            EpisodeFileDeleted: 'episodefile:deleted'
+            MovieAdded        : 'movie:added',
+            MovieDeleted      : 'movie:deleted',
+            MovieRenamed      :'movie:renamed'
         };
 
         vent.Commands = {
@@ -27,7 +28,8 @@ define(
             ShowLogFile               : 'showLogFile',
             ShowRenamePreview         : 'showRenamePreview',
             OpenControlPanelCommand   : 'OpenControlPanelCommand',
-            CloseControlPanelCommand  : 'CloseControlPanelCommand'
+            CloseControlPanelCommand  : 'CloseControlPanelCommand',
+            DeleteMovieCommand        : 'DeleteMovieCommand'
         };
 
         return vent;

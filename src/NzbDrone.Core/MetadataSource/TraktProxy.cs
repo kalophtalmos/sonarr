@@ -16,7 +16,7 @@ using NzbDrone.Core.Rest;
 
 namespace NzbDrone.Core.MetadataSource
 {
-    public class TraktProxy : ISearchForNewSeries, IProvideSeriesInfo
+    public class TraktProxy : ISearchForNewSeries, IProvideSeriesInfo, ISearchForNewMovie
     {
         private readonly Logger _logger;
         private static readonly Regex CollapseSpaceRegex = new Regex(@"\s+", RegexOptions.Compiled);
@@ -239,6 +239,34 @@ namespace NzbDrone.Core.MetadataSource
             }
 
             return seasons;
+        }
+
+        public List<Movies.Movie> SearchForNewMovie(string title)
+        {
+            var client = BuildClient("search", "movies");
+            var restRequest = new RestRequest(GetSearchTerm(title));
+            var response = client.ExecuteAndValidate<List<Movie>>(restRequest);
+
+            return response.Select(MapMovie).ToList();
+        }
+
+        private static Movies.Movie MapMovie(Movie movie)
+        {
+            var newMovie = new Movies.Movie();
+            newMovie.ImdbId = movie.imdb_id;
+            newMovie.TmdbId = movie.tmdb_id;
+            newMovie.Title = movie.title;
+            newMovie.CleanTitle = Parser.Parser.CleanSeriesTitle(movie.title);
+            newMovie.Year = movie.year;
+            newMovie.Overview = movie.overview;
+            newMovie.Runtime = movie.runtime;
+            newMovie.TitleSlug = movie.url.ToLower().Replace("http://trackt.tv/movie/", "");
+
+            newMovie.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Banner, Url = movie.images.banner });
+            newMovie.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Poster, Url = GetPosterThumbnailUrl(movie.images.poster) });
+            newMovie.Images.Add(new MediaCover.MediaCover { CoverType = MediaCoverTypes.Fanart, Url = movie.images.fanart });
+
+            return newMovie;
         }
     }
 }

@@ -50,6 +50,7 @@ namespace NzbDrone.Core.MediaFiles
             _logger = logger;
         }
 
+
         private void ProcessDownloadedEpisodesFolder()
         {
             //TODO: We should also process the download client's category folder

@@ -15,4 +15,17 @@ namespace NzbDrone.Core.IndexerSearch
             }
         }
     }
+
+    public class MovieSearchCommand : Command
+    {
+        public List<int> MovieIds { get; set; }
+
+        public override bool SendUpdatesToClient
+        {
+            get
+            {
+                return true;
+            }
+        }
+    }
 }

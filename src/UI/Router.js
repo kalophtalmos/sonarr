@@ -17,12 +17,15 @@ define(
                 'wanted'                    : 'wanted',
                 'wanted/:action'            : 'wanted',
                 'history'                   : 'history',
-                'history/:action'           : 'history',
+                'history/:action': 'history',
                 'rss'                       : 'rss',
                 'system'                    : 'system',
                 'system/:action'            : 'system',
                 'seasonpass'                : 'seasonPass',
                 'serieseditor'              : 'seriesEditor',
+                'movies'                    : 'movies',
+                'addmovie'                  : 'addMovie',
+                'addmove/:action(/:query)'  : 'addMovie',
                 ':whatever'                 : 'showNotFound'
             }
         });

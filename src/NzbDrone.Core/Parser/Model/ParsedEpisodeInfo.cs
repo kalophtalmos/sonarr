@@ -62,4 +62,17 @@ namespace NzbDrone.Core.Parser.Model
             return string.Format("{0} - {1} {2}", SeriesTitle, episodeString, Quality);
         }
     }
+
+    public class ParsedMovieInfo
+    {
+        public string MovieTitle { get; set; }
+        public QualityModel Quality { get; set; }
+        public Language Language { get; set; }
+        public Int32 Year { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0} - {1}", MovieTitle, Quality);
+        }
+    }
 }

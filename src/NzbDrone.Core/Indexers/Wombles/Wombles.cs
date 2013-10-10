@@ -43,12 +43,25 @@ namespace NzbDrone.Core.Indexers.Wombles
             get { yield return "http://newshost.co.za/rss/?sec=TV&fr=false"; }
         }
 
+        public override IEnumerable<string> MovieRecentFeed
+        {
+            get
+            {
+                yield return "http://nzb.isasecret.com/rss/?sec=Movie&fr=false";
+            }
+        }
+
         public override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber)
         {
             return new List<string>();
         }
 
         public override IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int offset)
+        {
+            return new List<string>();
+        }
+
+        public override IEnumerable<string> GetMovieSearchUrls(string movieTitle, string imdbId)
         {
             return new List<string>();
         }

@@ -48,9 +48,11 @@ namespace NzbDrone.Core.Indexers
         public virtual IParseFeed Parser { get; private set; }
         
         public abstract IEnumerable<string> RecentFeed { get; }
+        public abstract IEnumerable<string> MovieRecentFeed { get; } 
         public abstract IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber);
         public abstract IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int tvRageId, DateTime date);
         public abstract IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int offset);
+        public abstract IEnumerable<string> GetMovieSearchUrls(string movieTitle,string imdbId);
         public abstract IEnumerable<string> GetSearchUrls(string query, int offset);
 
         public override string ToString()

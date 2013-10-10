@@ -101,6 +101,27 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
         }
 
+        public override IEnumerable<string> MovieRecentFeed
+        {
+            get
+            {
+                //Todo: We should be able to update settings on start
+                if (Settings.Url.Contains("nzbs.org"))
+                {
+                    Settings.Categories = new List<int> { 2000 };
+                }
+
+                var url = String.Format("{0}/api?t=movie&cat={1}&extended=1", Settings.Url.TrimEnd('/'), String.Join(",", Settings.MovieCategories));
+
+                if (!String.IsNullOrWhiteSpace(Settings.ApiKey))
+                {
+                    url += "&apikey=" + Settings.ApiKey;
+                }
+
+                yield return url;
+            }
+        }
+
         public override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber)
         {
             if (tvRageId > 0)
@@ -109,6 +130,16 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
 
             return RecentFeed.Select(url => String.Format("{0}&limit=100&q={1}&season={2}&ep={3}", url, NewsnabifyTitle(seriesTitle), seasonNumber, episodeNumber));
+        }
+
+        public override IEnumerable<string> GetMovieSearchUrls(string movieTitle, string imdbId)
+        {
+            if (!string.IsNullOrEmpty(imdbId))
+            {
+                return MovieRecentFeed.Select(url => string.Format("{0}&limit=100&imdbid={1}", url, imdbId.Replace("tt",string.Empty)));
+            }
+
+            return MovieRecentFeed.Select(url => string.Format("{0}&limit=100&q={1}", url, NewsnabifyTitle(movieTitle)));
         }
 
         public override IEnumerable<string> GetSearchUrls(string query, int offset)

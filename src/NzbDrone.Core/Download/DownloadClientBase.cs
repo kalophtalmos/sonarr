@@ -39,6 +39,8 @@ namespace NzbDrone.Core.Download
         }
 
         public abstract string DownloadNzb(RemoteEpisode remoteEpisode);
+        public abstract void DownloadNzb(RemoteMovie remoteMovie);
+
         public abstract IEnumerable<QueueItem> GetQueue();
         public abstract IEnumerable<HistoryItem> GetHistory(int start = 0, int limit = 10);
         public abstract void RemoveFromQueue(string id);

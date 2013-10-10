@@ -47,6 +47,11 @@ namespace NzbDrone.Core.Download.Clients.Nzbget
             }
         }
 
+        public override void DownloadNzb(RemoteMovie remoteMovie)
+        {
+            throw new NotImplementedException();
+        }
+
         public override IEnumerable<QueueItem> GetQueue()
         {
             List<NzbgetQueueItem> queue;

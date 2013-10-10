@@ -72,6 +72,7 @@ namespace NzbDrone.Core.Indexers
             reportInfo.PublishDate = item.PublishDate();
             reportInfo.DownloadUrl = GetNzbUrl(item);
             reportInfo.InfoUrl = GetNzbInfoUrl(item);
+            reportInfo.ImdbId = GetImdbId(item);
 
             try
             {
@@ -103,6 +104,10 @@ namespace NzbDrone.Core.Indexers
         }
 
         protected abstract long GetSize(XElement item);
+
+        protected abstract int GetImdbId(XElement item);
+
+        protected abstract int GetTvdbId(XElement item);
 
         protected virtual void PreProcess(string source, string url)
         {

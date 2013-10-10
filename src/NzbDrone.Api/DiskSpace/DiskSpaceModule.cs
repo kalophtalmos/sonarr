@@ -8,7 +8,7 @@ namespace NzbDrone.Api.DiskSpace
         private readonly IDiskSpaceService _diskSpaceService;
 
         public DiskSpaceModule(IDiskSpaceService diskSpaceService)
-            :base("diskspace")
+            : base("diskspace")
         {
             _diskSpaceService = diskSpaceService;
             GetResourceAll = GetFreeSpace;

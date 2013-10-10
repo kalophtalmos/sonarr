@@ -114,6 +114,7 @@
     <Compile Include="DecisionEngineTests\RssSync\ProperSpecificationFixture.cs" />
     <Compile Include="DecisionEngineTests\Search\SeriesSpecificationFixture.cs" />
     <Compile Include="Download\DownloadApprovedReportsTests\DownloadApprovedFixture.cs" />
+    <Compile Include="Download\DownloadApprovedReportsTests\DownloadApprovedMovieFixture.cs" />
     <Compile Include="Download\DownloadApprovedReportsTests\GetQualifiedReportsFixture.cs" />
     <Compile Include="Download\DownloadClientTests\BlackholeProviderFixture.cs" />
     <Compile Include="Download\DownloadClientTests\NzbgetTests\DownloadNzbFixture.cs" />
@@ -161,6 +162,7 @@
     <Compile Include="MediaFiles\EpisodeImport\Specifications\NotUnpackingSpecificationFixture.cs" />
     <Compile Include="MediaFiles\EpisodeImport\Specifications\UpgradeSpecificationFixture.cs" />
     <Compile Include="MediaFiles\MediaInfo\VideoFileInfoReaderFixture.cs" />
+    <Compile Include="MediaFiles\MovieImport\MovieImportDecisionMakerFixture.cs" />
     <Compile Include="MediaFiles\RenameEpisodeFileServiceFixture.cs" />
     <Compile Include="MediaFiles\UpgradeMediaFileServiceFixture.cs" />
     <Compile Include="MediaFiles\ImportApprovedEpisodesFixture.cs" />

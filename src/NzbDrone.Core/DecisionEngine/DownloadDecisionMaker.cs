@@ -15,18 +15,24 @@ namespace NzbDrone.Core.DecisionEngine
     {
         List<DownloadDecision> GetRssDecision(List<ReleaseInfo> reports);
         List<DownloadDecision> GetSearchDecision(List<ReleaseInfo> reports, SearchCriteriaBase searchCriteriaBase);
+        List<MovieDownloadDecision> GetMovieRssDecision(List<ReleaseInfo> reports);
+
+        List<MovieDownloadDecision> GetMovieSearchDecision(List<ReleaseInfo> reports,
+            SearchCriteriaBase searchCriteriaBase);
     }
 
     public class DownloadDecisionMaker : IMakeDownloadDecision
     {
         private readonly IEnumerable<IRejectWithReason> _specifications;
         private readonly IParsingService _parsingService;
+        private readonly IMovieParsingService _movieParsingService;
         private readonly Logger _logger;
 
-        public DownloadDecisionMaker(IEnumerable<IDecisionEngineSpecification> specifications, IParsingService parsingService, Logger logger)
+        public DownloadDecisionMaker(IEnumerable<IRejectWithReason> specifications, IParsingService parsingService,IMovieParsingService movieParsingService, Logger logger)
         {
             _specifications = specifications;
             _parsingService = parsingService;
+            _movieParsingService = movieParsingService;
             _logger = logger;
         }
 
@@ -38,6 +44,70 @@ namespace NzbDrone.Core.DecisionEngine
         public List<DownloadDecision> GetSearchDecision(List<ReleaseInfo> reports, SearchCriteriaBase searchCriteriaBase)
         {
             return GetDecisions(reports, searchCriteriaBase).ToList();
+        }
+
+        public List<MovieDownloadDecision> GetMovieRssDecision(List<ReleaseInfo> reports)
+        {
+            return GetMovieDecisions(reports).ToList();
+        }
+
+        public List<MovieDownloadDecision> GetMovieSearchDecision(List<ReleaseInfo> reports,
+            SearchCriteriaBase searchCriteriaBase)
+        {
+            return GetMovieDecisions(reports, searchCriteriaBase).ToList();
+        }
+
+        private IEnumerable<MovieDownloadDecision> GetMovieDecisions(List<ReleaseInfo> reports,
+            SearchCriteriaBase searchCriteria = null)
+        {
+            if (reports.Any())
+            {
+                _logger.ProgressInfo("Processing {0} reports", reports.Count);
+            }
+
+            else
+            {
+                _logger.ProgressInfo("No reports found");
+            }
+            var reportNumber = 1;
+
+            foreach (var report in reports)
+            {
+                MovieDownloadDecision decision = null;
+                _logger.ProgressTrace("Processing report {0}/{1}", reportNumber, reports.Count);
+
+                try
+                {
+                    var parsedMovieInfo = Parser.Parser.ParseMovieTitle(report.Title);
+
+                    if (parsedMovieInfo != null && !string.IsNullOrWhiteSpace(parsedMovieInfo.MovieTitle))
+                    {
+                        var remoteMovie = _movieParsingService.Map(parsedMovieInfo, report.ImdbId, searchCriteria);
+                        remoteMovie.Release = report;
+
+                        if (remoteMovie.Movie != null)
+                        {
+                            remoteMovie.DownloadAllowed = true;
+                            decision = GetMovieDecisionForReport(remoteMovie, searchCriteria);
+                        }
+                        else
+                        {
+                            decision = new MovieDownloadDecision(remoteMovie, "Unknown Series");
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    _logger.ErrorException("Couldn't process report.", e);
+                }
+
+                reportNumber++;
+
+                if (decision != null)
+                {
+                    yield return decision;
+                }
+            }
         }
 
         private IEnumerable<DownloadDecision> GetDecisions(List<ReleaseInfo> reports, SearchCriteriaBase searchCriteria = null)
@@ -113,6 +183,38 @@ namespace NzbDrone.Core.DecisionEngine
                                          .Where(c => !string.IsNullOrWhiteSpace(c));
 
             return new DownloadDecision(remoteEpisode, reasons.ToArray());
+        }
+
+        private MovieDownloadDecision GetMovieDecisionForReport(RemoteMovie remoteMovie,
+            SearchCriteriaBase searchCriteria = null)
+        {
+            var reasons =
+                _specifications.Select(c => EvaluateSpec(c, remoteMovie, searchCriteria))
+                    .Where(c => !string.IsNullOrWhiteSpace(c));
+            return new MovieDownloadDecision(remoteMovie,reasons.ToArray());
+        }
+
+        private string EvaluateSpec(IRejectWithReason spec, RemoteMovie remoteMovie, SearchCriteriaBase searchCriteriaBase = null)
+        {
+            try
+            {
+
+                if (string.IsNullOrWhiteSpace(spec.RejectionReason)) throw new InvalidOperationException("[Need Rejection Text]");
+
+                var generalSpecification = spec as IMovieDecisionEngineSpecification;
+                if (generalSpecification != null && !generalSpecification.IsSatisfiedBy(remoteMovie, searchCriteriaBase))
+                {
+                    return spec.RejectionReason;
+                }
+            }
+            catch (Exception e)
+            {
+                e.Data.Add("report", remoteMovie.Release.ToJson());
+                e.Data.Add("parsed", remoteMovie.ParsedMovieInfo.ToJson());
+                _logger.ErrorException("Couldn't evaluate decision on " + remoteMovie.Release.Title, e);
+                return string.Format("{0}: {1}", spec.GetType().Name, e.Message);
+            }
+            return null;
         }
 
         private string EvaluateSpec(IRejectWithReason spec, RemoteEpisode remoteEpisode, SearchCriteriaBase searchCriteriaBase = null)

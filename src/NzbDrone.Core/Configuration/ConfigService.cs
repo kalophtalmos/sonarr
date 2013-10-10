@@ -12,7 +12,8 @@ namespace NzbDrone.Core.Configuration
 {
     public enum ConfigKey
     {
-        DownloadedEpisodesFolder
+        DownloadedEpisodesFolder,
+        DownloadedMoviesFolder
     }
 
     public class ConfigService : IConfigService
@@ -71,11 +72,24 @@ namespace NzbDrone.Core.Configuration
             _eventAggregator.PublishEvent(new ConfigSavedEvent());
         }
 
+
+        public String SabMovieCategory
+        {
+            get { return GetValue("SabMovieCategory", "movies"); }
+            set { SetValue("SabMovieCategory", value); }
+        }
+
         public String DownloadedEpisodesFolder
         {
             get { return GetValue(ConfigKey.DownloadedEpisodesFolder.ToString()); }
 
             set { SetValue(ConfigKey.DownloadedEpisodesFolder.ToString(), value); }
+        }
+
+        public String DownloadedMoviesFolder
+        {
+            get { return GetValue(ConfigKey.DownloadedMoviesFolder.ToString()); }
+            set { SetValue(ConfigKey.DownloadedMoviesFolder.ToString(), value); }
         }
 
         public bool AutoUnmonitorPreviouslyDownloadedEpisodes
@@ -192,6 +206,19 @@ namespace NzbDrone.Core.Configuration
             set { SetValue("FolderChmod", value); }
         }
 
+
+        public int MovieRssSyncInterval
+        {
+            get
+            {
+                return GetValueInt("MovieRssSyncInterval", 10);
+            }
+            set
+            {
+                SetValue("MovieRssSyncInterval", value);
+            }
+        }
+
         public String ChownUser
         {
             get { return GetValue("ChownUser", ""); }
@@ -301,5 +328,7 @@ namespace NzbDrone.Core.Configuration
                 _cache = new Dictionary<string, string>();
             }
         }
+
+
     }
 }

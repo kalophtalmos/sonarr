@@ -10,12 +10,12 @@ namespace NzbDrone.Core.IndexerSearch
     {
         private readonly ISeriesService _seriesService;
         private readonly ISearchForNzb _nzbSearchService;
-        private readonly IDownloadApprovedReports _downloadApprovedReports;
+        private readonly IDownloadApprovedTVReports _downloadApprovedReports;
         private readonly Logger _logger;
 
         public SeriesSearchService(ISeriesService seriesService,
                                    ISearchForNzb nzbSearchService,
-                                   IDownloadApprovedReports downloadApprovedReports,
+                                   IDownloadApprovedTVReports downloadApprovedReports,
                                    Logger logger)
         {
             _seriesService = seriesService;

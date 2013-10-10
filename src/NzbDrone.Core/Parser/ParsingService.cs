@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Windows.Forms.VisualStyles;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.DataAugmentation.Scene;
 using NzbDrone.Core.IndexerSearch.Definitions;
+using NzbDrone.Core.Movies;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 
@@ -21,6 +24,8 @@ namespace NzbDrone.Core.Parser
         ParsedEpisodeInfo ParseSpecialEpisodeTitle(string title, int tvRageId, SearchCriteriaBase searchCriteria = null);
         ParsedEpisodeInfo ParseSpecialEpisodeTitle(string title, Series series);
     }
+
+
 
     public class ParsingService : IParsingService
     {
@@ -81,6 +86,7 @@ namespace NzbDrone.Core.Parser
             };
         }
 
+
         public Series GetSeries(string title)
         {
             var parsedEpisodeInfo = Parser.ParseTitle(title);
@@ -121,6 +127,8 @@ namespace NzbDrone.Core.Parser
 
             return remoteEpisode;
         }
+
+        
 
         public List<Episode> GetEpisodes(ParsedEpisodeInfo parsedEpisodeInfo, Series series, bool sceneSource, SearchCriteriaBase searchCriteria = null)
         {
@@ -349,5 +357,6 @@ namespace NzbDrone.Core.Parser
 
             return episodeInfo;
         }
+
     }
 }

@@ -192,6 +192,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Datastore\Migration\046_fix_nzb_su_url.cs" />
+    <Compile Include="Datastore\Migration\047_add_movies.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationContext.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationController.cs" />
     <Compile Include="Datastore\Migration\Framework\MigrationExtension.cs" />
@@ -219,6 +220,7 @@
     <Compile Include="DecisionEngine\Specifications\RssSync\ProperSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\EpisodeRequestedSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\SeriesSpecification.cs" />
+    <Compile Include="DecisionEngine\Specifications\Search\MovieMatchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\SeasonMatchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\Search\DailyEpisodeMatchSpecification.cs" />
     <Compile Include="DecisionEngine\Specifications\AcceptableSizeSpecification.cs" />
@@ -264,6 +266,7 @@
     <Compile Include="Download\DownloadClientProvider.cs" />
     <Compile Include="Download\DownloadClientType.cs" />
     <Compile Include="Download\FailedDownloadService.cs" />
+    <Compile Include="Download\MovieGrabbedEvent.cs" />
     <Compile Include="Download\QueueItem.cs" />
     <Compile Include="Download\RedownloadFailedDownloadService.cs" />
     <Compile Include="Exceptions\BadRequestException.cs" />
@@ -278,6 +281,10 @@
     <Compile Include="HealthCheck\Checks\UpdateCheck.cs" />
     <Compile Include="HealthCheck\HealthCheck.cs" />
     <Compile Include="HealthCheck\TriggerHealthCheckEvent.cs" />
+    <Compile Include="History\HistoryService.cs" />
+    <Compile Include="History\IHistoryService.cs" />
+    <Compile Include="History\MovieHistory.cs" />
+    <Compile Include="History\MovieHistoryRepository.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedEpisodes.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedHistoryItems.cs" />
     <Compile Include="Housekeeping\Housekeepers\CleanupOrphanedMetadataFiles.cs" />
@@ -292,6 +299,7 @@
     <Compile Include="Housekeeping\IHousekeepingTask.cs" />
     <Compile Include="IndexerSearch\MissingEpisodeSearchCommand.cs" />
     <Compile Include="IndexerSearch\Definitions\SpecialEpisodeSearchCriteria.cs" />
+    <Compile Include="IndexerSearch\MovieSearchService.cs" />
     <Compile Include="IndexerSearch\SeriesSearchService.cs" />
     <Compile Include="IndexerSearch\SeriesSearchCommand.cs" />
     <Compile Include="IndexerSearch\EpisodeSearchService.cs" />
@@ -303,6 +311,7 @@
     <Compile Include="Indexers\Exceptions\ApiKeyException.cs" />
     <Compile Include="Indexers\Exceptions\RequestLimitReachedException.cs" />
     <Compile Include="Indexers\Eztv\Eztv.cs" />
+    <Compile Include="Indexers\FetchAndParseMovieRssService.cs" />
     <Compile Include="Indexers\FetchAndParseRssService.cs" />
     <Compile Include="Indexers\IIndexer.cs" />
     <Compile Include="Indexers\IndexerSettingUpdatedEvent.cs" />
@@ -331,10 +340,15 @@
     <Compile Include="MediaFiles\EpisodeImport\Specifications\FullSeasonSpecification.cs" />
     <Compile Include="MediaFiles\Events\SeriesScannedEvent.cs" />
     <Compile Include="MediaFiles\FileDateType.cs" />
+    <Compile Include="MediaFiles\DownloadMovieImportService.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\IImportMovieDecisionEngineSpecification.cs" />
+    <Compile Include="MediaFiles\EpisodeImport\ImportApprovedMovies.cs" />
     <Compile Include="MediaFiles\MediaFileExtensions.cs" />
     <Compile Include="MediaFiles\MediaInfo\VideoFileInfoReader.cs" />
     <Compile Include="MediaFiles\RenameEpisodeFilePreview.cs" />
     <Compile Include="MediaFiles\UpdateEpisodeFileService.cs" />
+    <Compile Include="MediaFiles\MovieFile.cs" />
+    <Compile Include="MediaFiles\MovieImport\MovieImportDecisionMaker.cs" />
     <Compile Include="Messaging\Commands\CommandExecutor.cs" />
     <Compile Include="Messaging\Commands\ICommandExecutor.cs" />
     <Compile Include="Messaging\Commands\IExecute.cs" />
@@ -345,7 +359,9 @@
     <Compile Include="Messaging\Events\EventAggregator.cs" />
     <Compile Include="Messaging\Events\IEventAggregator.cs" />
     <Compile Include="Messaging\Events\IHandle.cs" />
+    <Compile Include="MetadataSource\ISearchForNewMovie.cs" />
     <Compile Include="MetadataSource\Trakt\Actor.cs" />
+    <Compile Include="MetadataSource\Trakt\Movie.cs" />
     <Compile Include="MetadataSource\Trakt\People.cs" />
     <Compile Include="MetadataSource\Trakt\Ratings.cs" />
     <Compile Include="Metadata\Consumers\Roksbox\RoksboxMetadata.cs" />
@@ -370,6 +386,12 @@
     <Compile Include="Metadata\MetadataType.cs" />
     <Compile Include="HealthCheck\HealthCheckService.cs" />
     <Compile Include="HealthCheck\IProvideHealthCheck.cs" />
+    <Compile Include="Movies\Events\MovieAddedEvent.cs" />
+    <Compile Include="Movies\Events\MovieDeletedEvent.cs" />
+    <Compile Include="Movies\Events\MovieUpdatedEvent.cs" />
+    <Compile Include="Movies\Movie.cs" />
+    <Compile Include="Movies\MovieRepository.cs" />
+    <Compile Include="Movies\MovieService.cs" />
     <Compile Include="Notifications\NotificationFactory.cs" />
     <Compile Include="Notifications\NotificationService.cs" />
     <Compile Include="Notifications\DownloadMessage.cs" />
@@ -412,6 +434,7 @@
     <Compile Include="Organizer\SampleResult.cs" />
     <Compile Include="Parser\InvalidDateException.cs" />
     <Compile Include="Parser\Model\SeriesTitleInfo.cs" />
+    <Compile Include="Parser\MovieParsingService.cs" />
     <Compile Include="ProgressMessaging\CommandUpdatedEvent.cs" />
     <Compile Include="ProgressMessaging\ProgressMessageTarget.cs" />
     <Compile Include="Instrumentation\SetLoggingLevel.cs" />
@@ -468,7 +491,7 @@
     <Compile Include="Jobs\Scheduler.cs" />
     <Compile Include="Lifecycle\ApplicationStartedEvent.cs" />
     <Compile Include="MediaCover\MediaCover.cs" />
-    <Compile Include="MediaFiles\EpisodeFileMovingService.cs" />
+    <Compile Include="MediaFiles\MediaFileMovingService.cs" />
     <Compile Include="MediaFiles\Events\EpisodeFileAddedEvent.cs" />
     <Compile Include="MediaFiles\Events\EpisodeFileDeletedEvent.cs" />
     <Compile Include="MediaFiles\MediaFileTableCleanupService.cs" />
@@ -621,7 +644,7 @@
     <Compile Include="Notifications\Growl\GrowlService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="History\HistoryService.cs">
+    <Compile Include="History\MovieHistoryService.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Indexers\IndexerFactory.cs">
@@ -738,6 +761,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Download\Clients\uTorrent\" />
+    <Folder Include="Movies\Commands\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

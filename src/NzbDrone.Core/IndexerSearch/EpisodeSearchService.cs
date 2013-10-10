@@ -13,12 +13,12 @@ namespace NzbDrone.Core.IndexerSearch
     public class MissingEpisodeSearchService : IExecute<EpisodeSearchCommand>, IExecute<MissingEpisodeSearchCommand>
     {
         private readonly ISearchForNzb _nzbSearchService;
-        private readonly IDownloadApprovedReports _downloadApprovedReports;
+        private readonly IDownloadApprovedTVReports _downloadApprovedReports;
         private readonly IEpisodeService _episodeService;
         private readonly Logger _logger;
 
         public MissingEpisodeSearchService(ISearchForNzb nzbSearchService,
-                                    IDownloadApprovedReports downloadApprovedReports,
+                                    IDownloadApprovedTVReports downloadApprovedReports,
                                     IEpisodeService episodeService,
                                     Logger logger)
         {
@@ -45,13 +45,13 @@ namespace NzbDrone.Core.IndexerSearch
 
             var episodes =
                 _episodeService.EpisodesWithoutFiles(new PagingSpec<Episode>
-                                                     {
-                                                         Page = 1,
-                                                         PageSize = 100000,
-                                                         SortDirection = SortDirection.Ascending,
-                                                         SortKey = "Id",
+                {
+                    Page = 1,
+                    PageSize = 100000,
+                    SortDirection = SortDirection.Ascending,
+                    SortKey = "Id",
                                                          FilterExpression = v => v.Monitored == true && v.Series.Monitored == true
-                                                     }).Records.ToList();
+                }).Records.ToList();
 
             _logger.ProgressInfo("Performing missing search for {0} episodes", episodes.Count);
             var downloadedCount = 0;

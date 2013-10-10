@@ -7,6 +7,7 @@ using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Core.MediaFiles.Events;
 using NzbDrone.Core.Messaging.Events;
+using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Qualities;
 using NzbDrone.Core.Tv;
 
@@ -101,5 +102,7 @@ namespace NzbDrone.Core.MediaFiles.EpisodeImport
 
             return imported;
         }
+
+        
     }
 }

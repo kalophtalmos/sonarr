@@ -6,6 +6,7 @@ using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
 using NzbDrone.Common.EnsureThat;
+using NzbDrone.Core.Movies;
 using NzbDrone.Common.EnvironmentInfo;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Organizer;
@@ -14,13 +15,15 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.MediaFiles
 {
-    public interface IMoveEpisodeFiles
+    public interface IMoveMediaFiles
     {
         EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, Series series);
         EpisodeFile MoveEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode);
+        string MoveMovieFile(MovieFile movieFile, Movie movie);
+        string MoveMovieFile(MovieFile movieFile, LocalMovie localMovie);
     }
 
-    public class EpisodeFileMovingService : IMoveEpisodeFiles
+    public class MediaFileMovingService : IMoveMediaFiles
     {
         private readonly IEpisodeService _episodeService;
         private readonly IUpdateEpisodeFileService _updateEpisodeFileService;
@@ -29,7 +32,7 @@ namespace NzbDrone.Core.MediaFiles
         private readonly IConfigService _configService;
         private readonly Logger _logger;
 
-        public EpisodeFileMovingService(IEpisodeService episodeService,
+        public MediaFileMovingService(IEpisodeService episodeService,
                                 IUpdateEpisodeFileService updateEpisodeFileService,
                                 IBuildFileNames buildFileNames,
                                 IDiskProvider diskProvider,
@@ -64,6 +67,82 @@ namespace NzbDrone.Core.MediaFiles
             
             return MoveFile(episodeFile, localEpisode.Series, localEpisode.Episodes, filePath);
         }
+
+        
+        public string MoveMovieFile(MovieFile movieFile, LocalMovie localMovie)
+        {
+            var newFileName = buildMovieFileName(localMovie.Movie, movieFile);
+            var filePath = getMovieFilePath(localMovie.Movie, newFileName, Path.GetExtension(movieFile.Path));
+
+            MoveFile(movieFile,filePath,localMovie.Movie);
+
+            return filePath;
+        }
+
+        public string MoveMovieFile(MovieFile movieFile, Movie movie)
+        {
+            var newFileName = buildMovieFileName(movie, movieFile);
+
+            var filePath = getMovieFilePath(movie, newFileName, Path.GetExtension(movieFile.Path));
+
+            MoveFile(movieFile,filePath,movie);
+
+            return filePath;
+        }
+
+        private void MoveFile(MovieFile movieFile, string filePath,Movie movie)
+        {
+            
+            if(!_diskProvider.FileExists(movieFile.Path))
+                throw new FileNotFoundException("Movie File path does not exist",movieFile.Path);
+
+            if(movieFile.Path.PathEquals(filePath))
+                throw new SameFilenameException("File not moved, source and destination are the same",movieFile.Path);
+
+            _diskProvider.CreateFolder(new FileInfo(filePath).DirectoryName);
+
+            _logger.Debug("Moving [{0}] > [{1}]", movieFile.Path, filePath);
+            _diskProvider.MoveFile(movieFile.Path, filePath);
+
+            try
+            {
+                _logger.Trace("Setting last write time on series folder: {0}", movie.Path);
+                _diskProvider.FolderSetLastWriteTimeUtc(movie.Path, movieFile.DateAdded);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.WarnException("Unable to set last write time", ex);
+            }
+
+            //We should only run this on Windows
+            if (OsInfo.IsWindows)
+            {
+                //Wrapped in Try/Catch to prevent this from causing issues with remote NAS boxes, the move worked, which is more important.
+                try
+                {
+                    _diskProvider.InheritFolderPermissions(filePath);
+                }
+                catch (UnauthorizedAccessException ex)
+                {
+                    _logger.Debug("Unable to apply folder permissions to: ", filePath);
+                    _logger.TraceException(ex.Message, ex);
+                }
+            }
+
+        }
+
+        private string getMovieFilePath(Movie movie, string newFileName, string extension)
+        {
+            string path = movie.Path;
+            return Path.Combine(path, newFileName + extension);
+        }
+
+        private string buildMovieFileName(Movie movie, MovieFile movieFile)
+        {
+            return string.Format("{0} {1}", movie.CleanTitle, movie.Year);
+        }
+
 
         private EpisodeFile MoveFile(EpisodeFile episodeFile, Series series, List<Episode> episodes, string destinationFilename)
         {

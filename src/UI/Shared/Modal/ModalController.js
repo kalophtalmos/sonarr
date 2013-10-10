@@ -21,6 +21,7 @@ define(
                 vent.on(vent.Commands.DeleteSeriesCommand, this._deleteSeries, this);
                 vent.on(vent.Commands.ShowEpisodeDetails, this._showEpisode, this);
                 vent.on(vent.Commands.ShowHistoryDetails, this._showHistory, this);
+                vent.on(vent.Commands.DeleteMovieCommand, this._deleteMovie, this);
                 vent.on(vent.Commands.ShowLogDetails, this._showLogDetails, this);
                 vent.on(vent.Commands.ShowRenamePreview, this._showRenamePreview, this);
             },
@@ -50,6 +51,11 @@ define(
 
             _showHistory: function (options) {
                 var view = new HistoryDetailsView({ model: options.model });
+                AppLayout.modalRegion.show(view);
+            },
+            
+            _deleteMovie: function(options) {
+                var view = new DeleteSeriesView({ model: options.movie });
                 AppLayout.modalRegion.show(view);
             },
 

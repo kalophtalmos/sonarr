@@ -9,6 +9,7 @@ using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.IndexerSearch.Definitions;
 using NzbDrone.Core.Indexers;
 using NzbDrone.Core.Instrumentation.Extensions;
+using NzbDrone.Core.Movies;
 using NzbDrone.Core.Parser.Model;
 using NzbDrone.Core.Tv;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace NzbDrone.Core.IndexerSearch
         List<DownloadDecision> EpisodeSearch(int episodeId);
         List<DownloadDecision> EpisodeSearch(Episode episode);
         List<DownloadDecision> SeasonSearch(int seriesId, int seasonNumber);
+        List<MovieDownloadDecision> MovieSearch(int movieId);
     }
 
     public class NzbSearchService : ISearchForNzb
@@ -29,6 +31,7 @@ namespace NzbDrone.Core.IndexerSearch
         private readonly IFetchFeedFromIndexers _feedFetcher;
         private readonly ISceneMappingService _sceneMapping;
         private readonly ISeriesService _seriesService;
+        private readonly IMovieService _movieService;
         private readonly IEpisodeService _episodeService;
         private readonly IMakeDownloadDecision _makeDownloadDecision;
         private readonly Logger _logger;
@@ -37,6 +40,7 @@ namespace NzbDrone.Core.IndexerSearch
                                 IFetchFeedFromIndexers feedFetcher,
                                 ISceneMappingService sceneMapping,
                                 ISeriesService seriesService,
+                                IMovieService movieService,
                                 IEpisodeService episodeService,
                                 IMakeDownloadDecision makeDownloadDecision,
                                 Logger logger)
@@ -45,6 +49,7 @@ namespace NzbDrone.Core.IndexerSearch
             _feedFetcher = feedFetcher;
             _sceneMapping = sceneMapping;
             _seriesService = seriesService;
+            _movieService = movieService;
             _episodeService = episodeService;
             _makeDownloadDecision = makeDownloadDecision;
             _logger = logger;
@@ -127,6 +132,17 @@ namespace NzbDrone.Core.IndexerSearch
             return Dispatch(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
         }
 
+
+        public List<MovieDownloadDecision> MovieSearch(int movieId)
+        {
+            var movie = _movieService.GetMovie(movieId);
+
+            var searchSpec = Get<MovieSearchCriteria>(movie);
+
+            return DispatchMovie(indexer => _feedFetcher.Fetch(indexer, searchSpec), searchSpec);
+
+        }
+
         public List<DownloadDecision> SeasonSearch(int seriesId, int seasonNumber)
         {
             var series = _seriesService.GetSeries(seriesId);
@@ -187,6 +203,17 @@ namespace NzbDrone.Core.IndexerSearch
             return downloadDecisions;
         }
 
+        private TSpec Get<TSpec>(Movie movie) where TSpec : SearchCriteriaBase, new()
+        {
+            var spec = new TSpec();
+
+            spec.Movie = movie;
+            spec.SceneTitle = movie.Title;
+
+            return spec;
+
+        }
+
         private TSpec Get<TSpec>(Series series, List<Episode> episodes) where TSpec : SearchCriteriaBase, new()
         {
             var spec = new TSpec();
@@ -201,6 +228,46 @@ namespace NzbDrone.Core.IndexerSearch
             }
 
             return spec;
+        }
+
+        private List<MovieDownloadDecision> DispatchMovie(Func<IIndexer, IEnumerable<ReleaseInfo>> searchAction,
+            SearchCriteriaBase criteriaBase)
+        {
+            var indexers = _indexerFactory.GetAvailableProviders().ToList();
+            var reports = new List<ReleaseInfo>();
+
+            _logger.ProgressInfo("Searching {0} indexers for {1}", indexers.Count, criteriaBase);
+
+            var taskList = new List<Task>();
+            var taskFactory = new TaskFactory(TaskCreationOptions.LongRunning, TaskContinuationOptions.None);
+
+            foreach (var indexer in indexers)
+            {
+                var indexerLocal = indexer;
+
+                taskList.Add(taskFactory.StartNew(() =>
+                {
+                    try
+                    {
+                        var indexerReports = searchAction(indexerLocal);
+
+                        lock (reports)
+                        {
+                            reports.AddRange(indexerReports);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.ErrorException("Error while searching for " + criteriaBase, e);
+                    }
+                }).LogExceptions());
+            }
+
+            Task.WaitAll(taskList.ToArray());
+
+            _logger.Debug("Total of {0} reports were found for {1} from {2} indexers", reports.Count, criteriaBase, indexers.Count);
+
+            return _makeDownloadDecision.GetMovieSearchDecision(reports, criteriaBase).ToList();
         }
 
         private List<DownloadDecision> Dispatch(Func<IIndexer, IEnumerable<ReleaseInfo>> searchAction, SearchCriteriaBase criteriaBase)
@@ -241,5 +308,7 @@ namespace NzbDrone.Core.IndexerSearch
 
             return _makeDownloadDecision.GetSearchDecision(reports, criteriaBase).ToList();
         }
+
+
     }
 }

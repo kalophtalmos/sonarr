@@ -49,6 +49,23 @@ namespace NzbDrone.Core.Indexers.Newznab
             }
         }
 
+
+        protected override int GetImdbId(XElement item)
+        {
+            var attributes = item.Elements("attr").ToList();
+            var imdbElement =
+                attributes.SingleOrDefault(
+                    e => e.Attribute("name").Value.Equals("imdb", StringComparison.CurrentCultureIgnoreCase));
+            if (imdbElement != null) return Convert.ToInt32(imdbElement.Attribute("value").Value);
+
+            return 0;
+        }
+
+        protected override int GetTvdbId(XElement item)
+        {
+            return 0;
+        }
+
         protected override ReleaseInfo PostProcessor(XElement item, ReleaseInfo currentResult)
         {
             if (currentResult != null)
@@ -75,5 +92,6 @@ namespace NzbDrone.Core.Indexers.Newznab
         {
             NewznabPreProcessor.Process(source, url);
         }
+
     }
 }

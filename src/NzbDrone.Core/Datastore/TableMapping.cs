@@ -22,6 +22,7 @@ using NzbDrone.Core.RootFolders;
 using NzbDrone.Core.SeriesStats;
 using NzbDrone.Core.ThingiProvider;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.Movies;
 
 namespace NzbDrone.Core.Datastore
 {
@@ -48,6 +49,18 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<History.History>().RegisterModel("History")
                   .AutoMapChildModels();
 
+            Mapper.Entity<History.MovieHistory>().RegisterModel("MovieHistory")
+                .AutoMapChildModels();
+
+            Mapper.Entity<Movie>().RegisterModel("Movie")
+                .Ignore(s=>s.RootFolderPath)
+                .Relationship()
+                .HasOne(s=>s.QualityProfile,s=>s.QualityProfileId);
+
+            Mapper.Entity<MovieFile>().RegisterModel("MovieFile")
+                .Relationships.AutoMapICollectionOrComplexProperties();
+
+
             Mapper.Entity<Series>().RegisterModel("Series")
                   .Ignore(s => s.RootFolderPath)
                   .Relationship()
@@ -68,6 +81,7 @@ namespace NzbDrone.Core.Datastore
             Mapper.Entity<Log>().RegisterModel("Logs");
             Mapper.Entity<NamingConfig>().RegisterModel("NamingConfig");
             Mapper.Entity<SeriesStatistics>().MapResultSet();
+
             Mapper.Entity<Blacklist>().RegisterModel("Blacklist");
 
             Mapper.Entity<MetadataFile>().RegisterModel("MetadataFiles");

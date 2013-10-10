@@ -14,10 +14,13 @@ namespace NzbDrone.Core.Indexers
     public interface IFetchFeedFromIndexers
     {
         IList<ReleaseInfo> FetchRss(IIndexer indexer);
+        IList<ReleaseInfo> FetchMovieRss(IIndexer indexer);
         IList<ReleaseInfo> Fetch(IIndexer indexer, SeasonSearchCriteria searchCriteria);
         IList<ReleaseInfo> Fetch(IIndexer indexer, SingleEpisodeSearchCriteria searchCriteria);
         IList<ReleaseInfo> Fetch(IIndexer indexer, DailyEpisodeSearchCriteria searchCriteria);
         IList<ReleaseInfo> Fetch(IIndexer indexer, SpecialEpisodeSearchCriteria searchCriteria);
+        IList<ReleaseInfo> Fetch(IIndexer indexer, MovieSearchCriteria searchCriteria);
+
     }
 
     public class FetchFeedService : IFetchFeedFromIndexers
@@ -38,6 +41,15 @@ namespace NzbDrone.Core.Indexers
             var result = Fetch(indexer, indexer.RecentFeed);
 
             _logger.Debug("Finished processing feeds from {0} found {1} releases", indexer, result.Count);
+
+            return result;
+        }
+
+        public virtual IList<ReleaseInfo> FetchMovieRss(IIndexer indexer)
+        {
+            _logger.Debug("Fetching Movie feeds from "+indexer);
+            var result = Fetch(indexer,indexer.MovieRecentFeed);
+            _logger.Debug("Finished processing feeds from "+ indexer);
 
             return result;
         }
@@ -100,12 +112,24 @@ namespace NzbDrone.Core.Indexers
             foreach (var episodeQueryTitle in searchCriteria.EpisodeQueryTitles)
             {
                 _logger.Debug("Performing query of {0} for {1}", indexer, episodeQueryTitle);
-                queryUrls.AddRange(indexer.GetSearchUrls(episodeQueryTitle));
+                queryUrls.AddRange(indexer.GetSearchUrls(episodeQueryTitle, 0));
             }
 
             var result = Fetch(indexer, queryUrls);
             _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, result.Count);
             return result;
+        }
+
+        public IList<ReleaseInfo> Fetch(IIndexer indexer, MovieSearchCriteria searchCriteria)
+        {
+            _logger.Debug("Searching for {0}", searchCriteria);
+            var searchUrls = indexer.GetMovieSearchUrls(searchCriteria.QueryTitle,
+                searchCriteria.Movie.ImdbId);
+            var results = Fetch(indexer, searchUrls);
+
+            _logger.Info("Finished searching {0} for {1}. Found {2}", indexer, searchCriteria, results.Count);
+
+            return results;
         }
 
         private List<ReleaseInfo> Fetch(IIndexer indexer, IEnumerable<string> urls)

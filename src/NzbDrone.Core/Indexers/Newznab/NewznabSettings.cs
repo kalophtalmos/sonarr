@@ -46,6 +46,7 @@ namespace NzbDrone.Core.Indexers.Newznab
         public NewznabSettings()
         {
             Categories = new[] { 5030, 5040 };
+            MovieCategories = new[] {2030, 2040};
         }
 
         [FieldDefinition(0, Label = "URL")]
@@ -55,6 +56,7 @@ namespace NzbDrone.Core.Indexers.Newznab
         public String ApiKey { get; set; }
 
         public IEnumerable<Int32> Categories { get; set; }
+        public IEnumerable<Int32> MovieCategories { get; set; } 
 
         public ValidationResult Validate()
         {

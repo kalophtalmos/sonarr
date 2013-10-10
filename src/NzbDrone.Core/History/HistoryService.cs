@@ -11,20 +11,6 @@ using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.History
 {
-    public interface IHistoryService
-    {
-        List<History> All();
-        void Purge();
-        void Trim();
-        QualityModel GetBestQualityInHistory(QualityProfile qualityProfile, int episodeId);
-        PagingSpec<History> Paged(PagingSpec<History> pagingSpec);
-        List<History> BetweenDates(DateTime startDate, DateTime endDate, HistoryEventType eventType);
-        List<History> Failed();
-        List<History> Grabbed();
-        History MostRecentForEpisode(int episodeId);
-        History Get(int id);
-    }
-
     public class HistoryService : IHistoryService, IHandle<EpisodeGrabbedEvent>, IHandle<EpisodeImportedEvent>, IHandle<DownloadFailedEvent>
     {
         private readonly IHistoryRepository _historyRepository;
@@ -128,14 +114,14 @@ namespace NzbDrone.Core.History
             foreach (var episode in message.EpisodeInfo.Episodes)
             {
                 var history = new History
-                    {
-                        EventType = HistoryEventType.DownloadFolderImported,
-                        Date = DateTime.UtcNow,
-                        Quality = message.EpisodeInfo.Quality,
-                        SourceTitle = message.ImportedEpisode.SceneName,
-                        SeriesId = message.ImportedEpisode.SeriesId,
-                        EpisodeId = episode.Id
-                    };
+                {
+                    EventType = HistoryEventType.DownloadFolderImported,
+                    Date = DateTime.UtcNow,
+                    Quality = message.EpisodeInfo.Quality,
+                    SourceTitle = message.ImportedEpisode.SceneName,
+                    SeriesId = message.ImportedEpisode.SeriesId,
+                    EpisodeId = episode.Id
+                };
 
                 //Won't have a value since we publish this event before saving to DB.
                 //history.Data.Add("FileId", message.ImportedEpisode.Id.ToString());

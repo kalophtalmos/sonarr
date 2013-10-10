@@ -14,4 +14,15 @@ namespace NzbDrone.Core.Indexers
         }
 
     }
+
+    public class MovieRssSyncCommand : Command
+    {
+        public override bool SendUpdatesToClient
+        {
+            get
+            {
+                return true;
+            }
+        }
+    }
 }

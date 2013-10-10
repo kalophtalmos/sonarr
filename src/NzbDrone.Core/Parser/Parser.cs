@@ -105,6 +105,8 @@ namespace NzbDrone.Core.Parser
         private static readonly Regex SimpleTitleRegex = new Regex(@"480[i|p]|720[i|p]|1080[i|p]|[xh][\W_]?264|DD\W?5\W1|\<|\>|\?|\*|\:|\|",
                                                                    RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+        private static readonly Regex MovieTitleRegex = new Regex(@"(?<title>.+?)(?:\.|\s|_)(?<year>\d{4}(?!p|i))",RegexOptions.IgnoreCase|RegexOptions.Compiled);
+
         private static readonly Regex MultiPartCleanupRegex = new Regex(@"\(\d+\)$", RegexOptions.Compiled);
 
         private static readonly Regex LanguageRegex = new Regex(@"(?:\W|_)(?<italian>\bita\b|italian)|(?<german>german\b)|(?<flemish>flemish)|(?<greek>greek)|(?<french>(?:\W|_)FR)(?:\W|_)|(?<russian>\brus\b)",
@@ -141,6 +143,53 @@ namespace NzbDrone.Core.Parser
             result.ReleaseGroup = ParseReleaseGroup(fileInfo.Name.Replace(fileInfo.Extension, ""));
 
             return result;
+        }
+
+        public static ParsedMovieInfo ParsedMoviePath(string path)
+        {
+            var fileInfo = new FileInfo(path);
+
+            var result = ParseMovieTitle(fileInfo.Name);
+
+            if (result == null)
+            {
+                Logger.Trace("Attempting to parse movie info using full path. {0}", fileInfo.FullName);
+                result = ParseMovieTitle(fileInfo.FullName);
+            }
+
+            if (result == null)
+            {
+                Logger.Warn("Unable to parse movie info from path {0}", path);
+            }
+
+            return result;
+        }
+
+        public static ParsedMovieInfo ParseMovieTitle(string title)
+        {
+            try
+            {
+                if (!ValidateBeforeParsing(title)) return null;
+                Logger.Trace("Parsing string '{0}'", title);
+                var simpleTitle = MovieTitleRegex.Match(title).Groups["title"].Value.Replace('.', ' ');
+                int year;
+                Int32.TryParse(MovieTitleRegex.Match(title).Groups["year"].Value, out year);
+                var parsedMovieInfo = new ParsedMovieInfo();
+                parsedMovieInfo.MovieTitle = simpleTitle;
+                parsedMovieInfo.Year = year;
+                parsedMovieInfo.Quality =QualityParser.ParseQuality(title);
+                parsedMovieInfo.Language = ParseLanguage(title);
+                return parsedMovieInfo;
+
+            }
+            catch (Exception e)
+            {
+
+                if (!title.ToLower().Contains("password") && !title.ToLower().Contains("yenc"))
+                    Logger.ErrorException("An error has occurred while trying to parse " + title, e);
+            }
+            Logger.Trace("Unable to parse {0}", title);
+            return null;
         }
 
         public static ParsedEpisodeInfo ParseTitle(string title)

@@ -38,6 +38,14 @@ namespace NzbDrone.Core.Indexers.Eztv
             }
         }
 
+        public override IEnumerable<string> MovieRecentFeed
+        {
+            get
+            {
+                yield return "";
+            }
+        }
+
         public override IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber)
         {
             yield return string.Format("http://www.ezrss.it/search/index.php?show_name={0}&season={1}&episode={2}&mode=rss", seriesTitle, seasonNumber, episodeNumber);
@@ -47,6 +55,11 @@ namespace NzbDrone.Core.Indexers.Eztv
         {
             yield return string.Format("http://www.ezrss.it/search/index.php?show_name={0}&season={1}&mode=rss", seriesTitle, seasonNumber);
 
+        }
+
+        public override IEnumerable<string> GetMovieSearchUrls(string movieTitle, string imdbId)
+        {
+            yield return "";
         }
 
         public override IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int tvRageId, DateTime date)

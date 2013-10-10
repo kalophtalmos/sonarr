@@ -54,6 +54,11 @@ namespace NzbDrone.Core.Download.Clients.Pneumatic
             return null;
         }
 
+        public override void DownloadNzb(RemoteMovie remoteMovie)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool IsConfigured
         {
             get

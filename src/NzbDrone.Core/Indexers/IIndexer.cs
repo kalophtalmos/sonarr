@@ -12,9 +12,11 @@ namespace NzbDrone.Core.Indexers
         Boolean SupportsSearching { get; }
 
         IEnumerable<string> RecentFeed { get; }
+        IEnumerable<string> MovieRecentFeed { get; }
         IEnumerable<string> GetEpisodeSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int episodeNumber);
         IEnumerable<string> GetDailyEpisodeSearchUrls(string seriesTitle, int tvRageId, DateTime date);
         IEnumerable<string> GetSeasonSearchUrls(string seriesTitle, int tvRageId, int seasonNumber, int offset);
-        IEnumerable<string> GetSearchUrls(string query, int offset = 0);
+        IEnumerable<string> GetMovieSearchUrls(string movieTitle, string imdbId);
+        IEnumerable<string> GetSearchUrls(string query, int offset);
     }
 }

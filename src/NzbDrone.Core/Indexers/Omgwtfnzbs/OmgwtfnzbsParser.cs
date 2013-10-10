@@ -25,5 +25,15 @@ namespace NzbDrone.Core.Indexers.Omgwtfnzbs
             var sizeString = Regex.Match(item.Description(), @"(?:Size:\<\/b\>\s\d+\.)\d{1,2}\s\w{2}(?:\<br \/\>)", RegexOptions.IgnoreCase | RegexOptions.Compiled).Value;
             return ParseSize(sizeString);
         }
+
+        protected override int GetImdbId(XElement item)
+        {
+            return 0;
+        }
+
+        protected override int GetTvdbId(XElement item)
+        {
+            return 0;
+        }
     }
 }

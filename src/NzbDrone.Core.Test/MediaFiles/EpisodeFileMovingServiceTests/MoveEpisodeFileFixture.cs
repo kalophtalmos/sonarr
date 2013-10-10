@@ -16,7 +16,7 @@ using NzbDrone.Core.Tv;
 namespace NzbDrone.Core.Test.MediaFiles.EpisodeFileMovingServiceTests
 {
     [TestFixture]
-    public class MoveEpisodeFileFixture : CoreTest<EpisodeFileMovingService>
+    public class MoveEpisodeFileFixture : CoreTest<MediaFileMovingService>
     {
         private Series _series;
         private EpisodeFile _episodeFile;

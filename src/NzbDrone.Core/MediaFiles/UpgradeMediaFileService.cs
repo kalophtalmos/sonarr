@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NLog;
 using NzbDrone.Common;
 using NzbDrone.Common.Disk;
@@ -9,19 +10,20 @@ namespace NzbDrone.Core.MediaFiles
     public interface IUpgradeMediaFiles
     {
         EpisodeFileMoveResult UpgradeEpisodeFile(EpisodeFile episodeFile, LocalEpisode localEpisode);
+        string UpgradeMovieFile(MovieFile movieFile, LocalMovie localMovie);
     }
 
     public class UpgradeMediaFileService : IUpgradeMediaFiles
     {
         private readonly IRecycleBinProvider _recycleBinProvider;
         private readonly IMediaFileService _mediaFileService;
-        private readonly IMoveEpisodeFiles _episodeFileMover;
+        private readonly IMoveMediaFiles _episodeFileMover;
         private readonly IDiskProvider _diskProvider;
         private readonly Logger _logger;
 
         public UpgradeMediaFileService(IRecycleBinProvider recycleBinProvider,
                                        IMediaFileService mediaFileService,
-                                       IMoveEpisodeFiles episodeFileMover,
+                                       IMoveMediaFiles episodeFileMover,
                                        IDiskProvider diskProvider,
                                        Logger logger)
         {
@@ -57,6 +59,13 @@ namespace NzbDrone.Core.MediaFiles
             moveFileResult.EpisodeFile = _episodeFileMover.MoveEpisodeFile(episodeFile, localEpisode);
 
             return moveFileResult;
+        }
+
+        public string UpgradeMovieFile(MovieFile movieFile, LocalMovie localMovie)
+        {
+            //TODO: check if file already exists
+
+            return _episodeFileMover.MoveMovieFile(movieFile, localMovie);
         }
     }
 }

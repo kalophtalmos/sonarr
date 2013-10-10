@@ -8,11 +8,11 @@ namespace NzbDrone.Core.IndexerSearch
     public class SeasonSearchService : IExecute<SeasonSearchCommand>
     {
         private readonly ISearchForNzb _nzbSearchService;
-        private readonly IDownloadApprovedReports _downloadApprovedReports;
+        private readonly IDownloadApprovedTVReports _downloadApprovedReports;
         private readonly Logger _logger;
 
         public SeasonSearchService(ISearchForNzb nzbSearchService,
-                                   IDownloadApprovedReports downloadApprovedReports,
+                                   IDownloadApprovedTVReports downloadApprovedReports,
                                    Logger logger)
         {
             _nzbSearchService = nzbSearchService;

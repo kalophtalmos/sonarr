@@ -20,5 +20,7 @@ namespace NzbDrone.Core.Datastore.Migration
                   .Set(new { Settings = "{}" })
                   .Where(new { Implementation = "Omgwtfnzbs", Settings = "" });
         }
+
+        
     }
 }

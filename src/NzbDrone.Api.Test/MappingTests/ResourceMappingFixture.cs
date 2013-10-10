@@ -40,6 +40,7 @@ namespace NzbDrone.Api.Test.MappingTests
         [TestCase(typeof(ReleaseInfo), typeof(ReleaseResource))]
         [TestCase(typeof(ParsedEpisodeInfo), typeof(ReleaseResource))]
         [TestCase(typeof(DownloadDecision), typeof(ReleaseResource))]
+        [TestCase(typeof(MovieDownloadDecision),typeof(ReleaseResource))]
         [TestCase(typeof(Core.History.History), typeof(HistoryResource))]
         [TestCase(typeof(QualityProfile), typeof(QualityProfileResource))]
         [TestCase(typeof(QualityProfileItem), typeof(QualityProfileItemResource))]

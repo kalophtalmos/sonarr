@@ -29,7 +29,7 @@ namespace NzbDrone.Core.Parser.Model
         }
 
         public int TvRageId { get; set; }
-
+        public int ImdbId { get; set; }
         public override string ToString()
         {
             return String.Format("[{0}] {1} [{2}]", PublishDate, Title, Size);

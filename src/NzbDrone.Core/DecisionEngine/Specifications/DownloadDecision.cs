@@ -4,11 +4,15 @@ using NzbDrone.Core.Parser.Model;
 
 namespace NzbDrone.Core.DecisionEngine.Specifications
 {
-    public class DownloadDecision
+    public abstract class Decision
     {
-        public RemoteEpisode RemoteEpisode { get; private set; }
-        public IEnumerable<string> Rejections { get; private set; }
+        protected Decision(params string[] rejections)
+        {
+            Rejections = rejections.ToList();
+            
+        }
 
+        public IEnumerable<string> Rejections { get; protected set; }
         public bool Approved
         {
             get
@@ -16,11 +20,15 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
                 return !Rejections.Any();
             }
         }
+    }
 
-        public DownloadDecision(RemoteEpisode episode, params string[] rejections)
+    public class DownloadDecision : Decision
+    {
+        public RemoteEpisode RemoteEpisode { get; private set; }
+
+        public DownloadDecision(RemoteEpisode episode, params string[] rejections):base(rejections)
         {
             RemoteEpisode = episode;
-            Rejections = rejections.ToList();
         }
 
 
@@ -32,6 +40,26 @@ namespace NzbDrone.Core.DecisionEngine.Specifications
             }
 
             return "[Rejected " + Rejections.Count() + "]" + RemoteEpisode;
+        }
+    }
+
+    public class MovieDownloadDecision : Decision
+    {
+        public RemoteMovie RemoteMovie { get; private set; }
+
+        public MovieDownloadDecision(RemoteMovie remoteMovie,params string[] rejections):base(rejections)
+        {
+            RemoteMovie = remoteMovie;
+        }
+
+        public override string ToString()
+        {
+            if (Approved)
+            {
+                return "[OK] " + RemoteMovie;
+            }
+
+            return "[Rejected " + Rejections.Count() + "]" + RemoteMovie;
         }
     }
 }

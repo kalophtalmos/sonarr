@@ -7,6 +7,7 @@ namespace NzbDrone.Core.Download
     public interface IDownloadClient : IProvider
     {
         string DownloadNzb(RemoteEpisode remoteEpisode);
+        void DownloadNzb(RemoteMovie remoteMovie);
         IEnumerable<QueueItem> GetQueue();
         IEnumerable<HistoryItem> GetHistory(int start = 0, int limit = 0);
         void RemoveFromQueue(string id);

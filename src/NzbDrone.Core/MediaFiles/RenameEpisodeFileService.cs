@@ -26,7 +26,7 @@ namespace NzbDrone.Core.MediaFiles
     {
         private readonly ISeriesService _seriesService;
         private readonly IMediaFileService _mediaFileService;
-        private readonly IMoveEpisodeFiles _episodeFileMover;
+        private readonly IMoveMediaFiles _episodeFileMover;
         private readonly IEventAggregator _eventAggregator;
         private readonly IEpisodeService _episodeService;
         private readonly IBuildFileNames _filenameBuilder;
@@ -34,7 +34,7 @@ namespace NzbDrone.Core.MediaFiles
 
         public RenameEpisodeFileService(ISeriesService seriesService,
                                         IMediaFileService mediaFileService,
-                                        IMoveEpisodeFiles episodeFileMover,
+                                        IMoveMediaFiles episodeFileMover,
                                         IEventAggregator eventAggregator,
                                         IEpisodeService episodeService,
                                         IBuildFileNames filenameBuilder,

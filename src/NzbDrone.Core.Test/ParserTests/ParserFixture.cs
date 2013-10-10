@@ -23,6 +23,16 @@ namespace NzbDrone.Core.Test.ParserTests
          * Superman.-.The.Man.of.Steel.1994-05.33.hybrid.DreamGirl-Novus-HD
          */
 
+        [TestCase("Turbo.2013.BDRip.X264-ALLiANCE","Turbo",2013)]
+        [TestCase("Pacific.Rim.2013.DVD9-NoGroup","Pacific Rim",2013)]
+        public void ParseMovieTitle_singe(string postTitle, string title,int year)
+        {
+            var result = Parser.Parser.ParseMovieTitle(postTitle);
+            result.Should().NotBeNull();
+            result.Year.Should().Be(year);
+            result.MovieTitle.Should().Be(title);
+        }
+
         [TestCase("Chuck - 4x05 - Title", "Chuck")]
         [TestCase("Law & Order - 4x05 - Title", "laworder")]
         [TestCase("Bad Format", "badformat")]

@@ -16,4 +16,8 @@ namespace NzbDrone.Core.MediaFiles.Commands
         public Boolean SendUpdates { get; set; }
         public String Path { get; set; }
     }
+
+    public class DownloadedMovieScanCommand : Command
+    {
+    }
 }

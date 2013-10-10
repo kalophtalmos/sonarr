@@ -1,12 +1,23 @@
 ﻿<fieldset">
     <legend>Options</legend>
     <div class="control-group">
-        <label class="control-label">Drone Factory</label>
+        <label class="control-label">Drone TV Factory</label>
 
         <div class="controls">
             <input type="text" name="downloadedEpisodesFolder" class="x-path"/>
             <span class="help-inline">
                 <i class="icon-nd-form-info" title="The folder where your download client downloads TV shows to (Completed Download Directory)"/>
+                <i class="icon-nd-form-warning" title="Do not use the folder that contains some or all of your sorted and named TV shows - doing so could cause data loss"></i>
+            </span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Drone Movie Factory</label>
+
+        <div class="controls">
+            <input type="text" name="downloadedMoviesFolder" class="x-path"/>
+            <span class="help-inline">
+                <i class="icon-nd-form-info" title="The folder where your download client downloads Movies shows to (Completed Download Directory)"/>
                 <i class="icon-nd-form-warning" title="Do not use the folder that contains some or all of your sorted and named TV shows - doing so could cause data loss"></i>
             </span>
         </div>

@@ -10,6 +10,7 @@ namespace NzbDrone.Core.Download
     public interface IDownloadService
     {
         void DownloadReport(RemoteEpisode remoteEpisode);
+        void DownloadReport(RemoteMovie remoteMovie);
     }
 
 
@@ -36,23 +37,32 @@ namespace NzbDrone.Core.Download
             var downloadTitle = remoteEpisode.Release.Title;
             var downloadClient = _downloadClientProvider.GetDownloadClient();
 
-            if (downloadClient == null)
-            {
-                _logger.Warn("Download client isn't configured yet.");
-                return;
-            }
+            if (DownloadClientConfigured(downloadClient)) return;
 
-            var downloadClientId = downloadClient.DownloadNzb(remoteEpisode);
-            var episodeGrabbedEvent = new EpisodeGrabbedEvent(remoteEpisode);
-            episodeGrabbedEvent.DownloadClient = downloadClient.GetType().Name;
-
-            if (!String.IsNullOrWhiteSpace(downloadClientId))
-            {
-                episodeGrabbedEvent.DownloadClientId = downloadClientId;
-            }
+            downloadClient.DownloadNzb(remoteEpisode);
 
             _logger.ProgressInfo("Report sent to download client. {0}", downloadTitle);
-            _eventAggregator.PublishEvent(episodeGrabbedEvent);
+            _eventAggregator.PublishEvent(new EpisodeGrabbedEvent(remoteEpisode));
+        }
+
+        public void DownloadReport(RemoteMovie remoteMovie)
+        {
+            var downloadTitle = remoteMovie.Release.Title;
+            var downloadClient = _downloadClientProvider.GetDownloadClient();
+
+            if (DownloadClientConfigured(downloadClient)) return;
+
+            downloadClient.DownloadNzb(remoteMovie);
+            _logger.ProgressInfo("Report sent to download client. {0}", downloadTitle);
+        }
+
+        private bool DownloadClientConfigured(IDownloadClient downloadClient)
+        {
+            {
+                _logger.Warn("Download client isn't configured yet.");
+                return true;
+            }
+            return false;
         }
     }
 }

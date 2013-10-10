@@ -1,18 +1,67 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using NLog;
 using NzbDrone.Core.DecisionEngine.Specifications;
 using NzbDrone.Core.Qualities;
 
 namespace NzbDrone.Core.Download
 {
-    public interface IDownloadApprovedReports
+    public interface IDownloadApprovedTVReports : IDownloadApprovedReports<DownloadDecision>
+    {}
+    public interface IDownloadApprovedReports<T>
     {
-        List<DownloadDecision> DownloadApproved(List<DownloadDecision> decisions);
+        List<T> DownloadApproved(List<T> decisions);
     }
 
-    public class DownloadApprovedReports : IDownloadApprovedReports
+    public interface IDownloadApprovedMovieReports : IDownloadApprovedReports<MovieDownloadDecision>
+    {
+    }
+
+    public class DownloadApprovedMovieReports : IDownloadApprovedMovieReports
+    {
+        private readonly Logger _logger;
+        private readonly IDownloadService _downloadService;
+
+        public DownloadApprovedMovieReports(Logger logger,IDownloadService downloadService)
+        {
+            _logger = logger;
+            _downloadService = downloadService;
+        }
+
+        public List<MovieDownloadDecision> DownloadApproved(List<MovieDownloadDecision> decisions)
+        {
+            var qualifiedReports = GetQualifiedReports(decisions);
+            var downloadReports = new List<MovieDownloadDecision>();
+            foreach (var report in qualifiedReports)
+            {
+                var remoteMovie = report.RemoteMovie;
+                try
+                {
+                    if(downloadReports.Any(x=>x.RemoteMovie.Movie.Id == report.RemoteMovie.Movie.Id))
+                        continue;
+                    _downloadService.DownloadReport(remoteMovie);
+                    downloadReports.Add(report);
+                }
+                catch (Exception e)
+                {
+
+                    _logger.WarnException("Couldn't add report to download queue. " + report, e);
+                }
+            }
+            return downloadReports;
+        }
+
+        private List<MovieDownloadDecision> GetQualifiedReports(IEnumerable<MovieDownloadDecision> decisions)
+        {
+            return decisions.Where(c => c.Approved).OrderByDescending(c => c.RemoteMovie.ParsedMovieInfo.Quality)
+                            .ThenBy(c => c.RemoteMovie.Release.Age)
+                            .ToList();
+        }
+    }
+
+    public class DownloadApprovedReports : IDownloadApprovedTVReports
     {
         private readonly IDownloadService _downloadService;
         private readonly Logger _logger;

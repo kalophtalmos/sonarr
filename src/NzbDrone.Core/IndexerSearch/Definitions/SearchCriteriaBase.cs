@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using NzbDrone.Common.EnsureThat;
+using NzbDrone.Core.Movies;
 using NzbDrone.Core.Tv;
 
 namespace NzbDrone.Core.IndexerSearch.Definitions
@@ -14,6 +15,8 @@ namespace NzbDrone.Core.IndexerSearch.Definitions
         public Series Series { get; set; }
         public string SceneTitle { get; set; }
         public List<Episode> Episodes { get; set; }
+
+        public Movie Movie { get; set; }
 
         public string QueryTitle
         {

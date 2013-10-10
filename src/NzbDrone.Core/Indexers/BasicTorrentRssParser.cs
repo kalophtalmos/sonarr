@@ -43,5 +43,15 @@ namespace NzbDrone.Core.Indexers
         {
             return item.Element("torrent");
         }
+
+        protected override int GetImdbId(XElement item)
+        {
+            return 0;
+        }
+
+        protected override int GetTvdbId(XElement item)
+        {
+            return 0;
+        }
     }
 }

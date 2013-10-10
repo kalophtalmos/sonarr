@@ -8,10 +8,10 @@ define(
                 ConfigUpdatedEvent: 'ConfigUpdatedEvent'
             },
             Keys  : {
-                DefaultQualityProfileId: 'DefaultQualityProfileId',
-                DefaultRootFolderId    : 'DefaultRootFolderId',
-                UseSeasonFolder        : 'UseSeasonFolder',
-                AdvancedSettings       : 'advancedSettings'
+                DefaultQualityProfileId : 'DefaultQualityProfileId',
+                DefaultRootFolderId     : 'DefaultRootFolderId',
+                DefaultRootMovieId      : 'DefaultRootMovieId',
+                AdvancedSettings        : 'advancedSettings'
             },
 
             getValueBoolean: function (key, defaultValue) {
@@ -40,7 +40,6 @@ define(
 
                 window.localStorage.setItem(key, value);
                 vent.trigger(this.Events.ConfigUpdatedEvent, {key: key, value: value});
-
             }
         };
     });

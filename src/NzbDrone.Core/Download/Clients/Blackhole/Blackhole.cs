@@ -40,6 +40,11 @@ namespace NzbDrone.Core.Download.Clients.Blackhole
             return null;
         }
 
+        public override void DownloadNzb(RemoteMovie remoteMovie)
+        {
+            throw new NotImplementedException();
+        }
+
         public override IEnumerable<QueueItem> GetQueue()
         {
             return new QueueItem[0];
