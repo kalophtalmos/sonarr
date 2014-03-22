@@ -17,7 +17,7 @@ define(
                 'wanted'                    : 'wanted',
                 'wanted/:action'            : 'wanted',
                 'history'                   : 'history',
-                'history/:action': 'history',
+                'history/:action'           : 'history',
                 'rss'                       : 'rss',
                 'system'                    : 'system',
                 'system/:action'            : 'system',

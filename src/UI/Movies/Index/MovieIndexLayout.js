@@ -64,6 +64,19 @@ define(
                         }
                 ]
             },
+
+            initialize: function (options) {
+                if (options.action) {
+                    this.action = options.action.toLowerCase();
+                }
+
+                this.movieCollection = MovieCollection;
+
+                this.listenTo(MovieCollection, 'sync', this._renderView);
+                this.listenTo(MovieCollection, 'remove', this._renderView);
+
+            },
+
             _showTable: function() {
                 this.currentView = new Backgrid.Grid({                    
                     collection: MovieCollection,
@@ -87,24 +100,17 @@ define(
                     //this._showFooter();
                 }
             },
-            
-            initialize: function (options) {
-                if (options.action) {
-                    this.action = options.action.toLowerCase();
-                }
 
-                this.listenTo(MovieCollection, 'sync', this._renderView);
-                this.listenTo(MovieCollection, 'remove', this._renderView);
-
-            },
             _fetchCollection: function() {
                 MovieCollection.fetch();
             },
+
             onShow: function () {
                 this._showToolbar();
                 this._renderView();
                 this._fetchCollection();
             },
+
             _showToolbar: function() {
                 if (this.toolbar.currentView) {
                     return;
@@ -113,24 +119,24 @@ define(
                 var viewButtons = {
                     type: 'radio',
                     storeState: true,
-                    menuKey: 'seriesViewMode',
+                    menuKey: 'moviesViewMode',
                     defaultAction: 'tableView',
                     items:
                         [
-                            {
-                                key: 'posterView',
-                                title: '',
-                                tooltip: 'Posters',
-                                icon: 'icon-th-large',
-                                callback: this._showPosters
-                            },
-                            {
-                                key: 'listView',
-                                title: '',
-                                tooltip: 'Overview List',
-                                icon: 'icon-th-list',
-                                callback: this._showList
-                            },
+//                            {
+//                                key: 'posterView',
+//                                title: '',
+//                                tooltip: 'Posters',
+//                                icon: 'icon-th-large',
+//                                callback: this._showPosters
+//                            },
+//                            {
+//                                key: 'listView',
+//                                title: '',
+//                                tooltip: 'Overview List',
+//                                icon: 'icon-th-list',
+//                                callback: this._showList
+//                            },
                             {
                                 key: 'tableView',
                                 title: '',
