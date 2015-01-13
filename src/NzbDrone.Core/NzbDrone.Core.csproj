@@ -138,6 +138,11 @@
     <Compile Include="DataAugmentation\Scene\SceneMappingsUpdatedEvent.cs" />
     <Compile Include="DataAugmentation\Scene\ServicesProvider.cs" />
     <Compile Include="DataAugmentation\Scene\UpdateSceneMappingCommand.cs" />
+    <Compile Include="DataAugmentation\Sickbeard\Model\Quality.cs" />
+    <Compile Include="DataAugmentation\Sickbeard\Model\tv_episode.cs" />
+    <Compile Include="DataAugmentation\Sickbeard\Model\tv_show.cs" />
+    <Compile Include="DataAugmentation\Sickbeard\SickbeardDbFactory.cs" />
+    <Compile Include="DataAugmentation\Sickbeard\SickbeardService.cs" />
     <Compile Include="DataAugmentation\Xem\Model\XemResult.cs" />
     <Compile Include="DataAugmentation\Xem\Model\XemSceneTvdbMapping.cs" />
     <Compile Include="DataAugmentation\Xem\Model\XemValues.cs" />

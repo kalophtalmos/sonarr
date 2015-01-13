@@ -9,6 +9,7 @@ using NzbDrone.Common.Extensions;
 using NzbDrone.Common.Instrumentation;
 using NzbDrone.Core.Configuration;
 using NzbDrone.Core.Tv;
+using NzbDrone.Core.DataAugmentation.Sickbeard;
 
 namespace NzbDrone.Core.RootFolders
 {
@@ -23,6 +24,7 @@ namespace NzbDrone.Core.RootFolders
 
     public class RootFolderService : IRootFolderService
     {
+        private readonly ISickbeardService _sickbeardService;
         private readonly IRootFolderRepository _rootFolderRepository;
         private readonly IDiskProvider _diskProvider;
         private readonly ISeriesRepository _seriesRepository;
@@ -42,12 +44,14 @@ namespace NzbDrone.Core.RootFolders
                                                                  };
 
 
-        public RootFolderService(IRootFolderRepository rootFolderRepository,
+        public RootFolderService(ISickbeardService sickbeardService,
+                                 IRootFolderRepository rootFolderRepository,
                                  IDiskProvider diskProvider,
                                  ISeriesRepository seriesRepository,
                                  IConfigService configService,
                                  Logger logger)
         {
+            _sickbeardService = sickbeardService;
             _rootFolderRepository = rootFolderRepository;
             _diskProvider = diskProvider;
             _seriesRepository = seriesRepository;
@@ -133,6 +137,22 @@ namespace NzbDrone.Core.RootFolders
 
             var setToRemove = SpecialFolders;
             results.RemoveAll(x => setToRemove.Contains(new DirectoryInfo(x.Path.ToLowerInvariant()).Name));
+            
+            if (_sickbeardService.DatabaseExists)
+            {
+                var allSbSeries = _sickbeardService.GetAllSeries().ToDictionary(v => v.Path, PathEqualityComparer.Instance);
+
+                foreach (var unmappedFolder in results)
+                {
+                    Series sbSeries;
+                    if (allSbSeries.TryGetValue(unmappedFolder.Path, out sbSeries))
+                    {
+                        unmappedFolder.Name = "tvdb:" + sbSeries.TvdbId.ToString();
+                    }
+                }
+
+                return results;
+            }
 
             _logger.Debug("{0} unmapped folders detected.", results.Count);
             return results;
