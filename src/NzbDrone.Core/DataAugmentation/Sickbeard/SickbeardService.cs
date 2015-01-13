@@ -126,7 +126,7 @@ namespace NzbDrone.Core.DataAugmentation.Sickbeard
                 Title = series.show_name,
                 TvdbId = series.tvdb_id,
                 // quality
-                SeasonFolder = series.flatten_folders != 0,
+                SeasonFolder = series.flatten_folders == 0,
                 Monitored = series.paused != 0,
                 SeriesType = series.air_by_date != 0 ? SeriesTypes.Daily : SeriesTypes.Standard
             };
@@ -176,7 +176,10 @@ namespace NzbDrone.Core.DataAugmentation.Sickbeard
 
             var updated = UpdateEpisodeFile(message.EpisodeInfo.Series, episodeFile);
 
-            _mediaFileService.Update(episodeFile);
+            if (updated)
+            {
+                _mediaFileService.Update(episodeFile);
+            }
         }
     }
 }
