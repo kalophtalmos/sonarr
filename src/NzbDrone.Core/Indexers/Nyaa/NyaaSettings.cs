@@ -20,15 +20,15 @@ namespace NzbDrone.Core.Indexers.Nyaa
 
         public NyaaSettings()
         {
-            BaseUrl = "http://www.nyaa.se";
+            BaseUrl = "https://www.nyaa.se";
             AdditionalParameters = "&cats=1_37&filter=1";
         }
 
         [FieldDefinition(0, Label = "Website URL")]
-        public string BaseUrl { get; set; }
+        public string BaseUrl { get; }
 
         [FieldDefinition(1, Label = "Additional Parameters", Advanced = true, HelpText = "Please note if you change the category you will have to add required/restricted rules about the subgroups to avoid foreign language releases.")]
-        public string AdditionalParameters { get; set; }
+        public string AdditionalParameters { get; }
 
         public NzbDroneValidationResult Validate()
         {
