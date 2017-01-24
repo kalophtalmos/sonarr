@@ -41,10 +41,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FizzWare.NBuilder, Version=4.0.0.115, Culture=neutral, PublicKeyToken=5651b03e12e42c12, processorArchitecture=MSIL">
-      <HintPath>..\packages\NBuilder.4.0.0\lib\net40\FizzWare.NBuilder.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="FluentAssertions, Version=4.18.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentAssertions.4.18.0\lib\net40\FluentAssertions.dll</HintPath>
       <Private>True</Private>
@@ -59,24 +55,14 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Moq">
-      <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientSchemaTests\SchemaBuilderFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Marr.Data\Marr.Data.csproj">
-      <Project>{F6FC6BE7-0847-4817-A1ED-223DC647C3D7}</Project>
-      <Name>Marr.Data</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NzbDrone.Api\NzbDrone.Api.csproj">
       <Project>{FD286DF8-2D3A-4394-8AD5-443FADE55FB2}</Project>
       <Name>NzbDrone.Api</Name>
