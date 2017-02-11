@@ -1,0 +1,14 @@
+.posterSizeMenu,
+.viewMenu,
+.sortMenu {
+  composes: menu from 'Components/Menu/Menu.css';
+
+  margin-right: 20px;
+}
+
+.innerContentBody {
+  composes: innerContentBody from 'Components/Page/PageContentBody.css';
+
+  /* 5px less padding than normal to handle poster's 5px margin */
+  padding: 15px;
+}

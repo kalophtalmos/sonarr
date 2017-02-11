@@ -1,0 +1,19 @@
+.menuButton {
+  composes: menuButton from './MenuButton.css';
+
+  line-height: 60px;
+}
+
+.menuButtonIcon {
+  vertical-align: middle;
+}
+
+.menuButtonText {
+  margin-left: 5px;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .menuButtonText {
+    display: none;
+  }
+}

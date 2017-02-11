@@ -1,0 +1,10 @@
+.menuButton {
+  &::after {
+    margin-left: 5px;
+    content: '\25BE';
+  }
+
+  &:hover {
+    color: $toobarButtonHoverColor;
+  }
+}

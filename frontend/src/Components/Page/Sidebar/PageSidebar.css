@@ -1,0 +1,48 @@
+.sidebarContainer {
+  flex: 0 0 $sidebarWidth;
+  overflow: hidden;
+  width: $sidebarWidth;
+  background-color: $sidebarBackgroundColor;
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(0);
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+  background-color: $sidebarBackgroundColor;
+  color: $white;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .sidebarContainer {
+    position: fixed;
+    top: 0;
+    z-index: 1;
+    height: 100vh;
+  }
+
+  .sidebar {
+    position: fixed;
+    z-index: 1;
+  }
+}
+
+@keyframes slide-in {
+  100% {
+    transform: translateX(-$sidebarWidth);
+  }
+}
+
+@keyframes slide-out {
+  0% {
+    transform: translateX(-$sidebarWidth);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}

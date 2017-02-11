@@ -1,0 +1,19 @@
+.result {
+  display: flex;
+  padding: 3px;
+}
+
+.poster {
+  width: 35px;
+  height: 50px;
+}
+
+.title {
+  margin-left: 5px;
+}
+
+.alternateTitle {
+  margin-left: 5px;
+  color: $disabledColor;
+  font-size: $smallFontSize;
+}

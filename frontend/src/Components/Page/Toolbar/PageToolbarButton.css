@@ -1,0 +1,25 @@
+.toolbarButton {
+  composes: link from 'Components/Link/Link.css';
+
+  width: 60px;
+  text-align: center;
+  line-height: 60px;
+
+  &:hover {
+    color: $toobarButtonHoverColor;
+  }
+}
+
+.isDisabled {
+  color: $disabledColor;
+}
+
+.toolbarButtonIcon {
+  vertical-align: middle;
+}
+
+@media only screen and (max-width: $breakpointSmall) {
+  .toolbarButton {
+    width: 50px;
+  }
+}

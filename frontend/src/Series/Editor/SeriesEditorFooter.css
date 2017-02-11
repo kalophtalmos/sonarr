@@ -1,0 +1,17 @@
+.inputContainer {
+  margin-right: 20px;
+  min-width: 150px;
+}
+
+.label {
+  margin-bottom: 3px;
+  font-weight: bold;
+}
+
+.saveSelectedButton,
+.organizeSelectedButton {
+  composes: button from 'Components/Link/SpinnerButton.css';
+
+  margin-right: 10px;
+  height: 35px;
+}

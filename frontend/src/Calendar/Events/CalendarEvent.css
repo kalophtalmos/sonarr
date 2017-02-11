@@ -1,0 +1,82 @@
+.event {
+  overflow-x: hidden;
+  margin: 4px 2px;
+  padding: 5px;
+  border-bottom: 1px solid $borderColor;
+  border-left: 4px solid $borderColor;
+  font-size: 12px;
+}
+
+.info,
+.episodeInfo {
+  display: flex;
+}
+
+.seriesTitle,
+.episodeTitle {
+  composes: truncate from 'Styles/Mixins/truncate.css';
+
+  flex: 1 0 1px;
+  margin-right: 10px;
+}
+
+.seriesTitle {
+  color: #3a3f51;
+  font-size: 14px;
+}
+
+.absoluteEpisodeNumber {
+  margin-left: 3px;
+}
+
+.statusIcon {
+  margin-left: 3px;
+}
+
+/*
+ * Status
+ */
+
+.downloaded {
+  border-left-color: $successColor;
+
+  &:global(.colorImpaired) {
+    background: repeating-linear-gradient(45deg, transparent, transparent 5px, #eee 5px, #eee 10px);
+  }
+}
+
+.downloading {
+  border-left-color: $purple;
+
+  &:global(.colorImpaired) {
+    background: repeating-linear-gradient(90deg, transparent, transparent 5px, #eee 5px, #eee 10px);
+  }
+}
+
+.unmonitored {
+  border-left-color: $gray;
+}
+
+.onAir {
+  border-left-color: $warningColor;
+}
+
+.missing {
+  border-left-color: $dangerColor;
+}
+
+.premiere {
+  border-left-color: $sonarrBlue;
+
+  &:global(.colorImpaired) {
+    background: repeating-linear-gradient(45deg, transparent, transparent 5px, #eee 5px, #eee 10px);
+  }
+}
+
+.unaired {
+  border-left-color: $primaryColor;
+
+  &:global(.colorImpaired) {
+    background: repeating-linear-gradient(90deg, transparent, transparent 5px, #eee 5px, #eee 10px);
+  }
+}

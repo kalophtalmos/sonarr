@@ -1,0 +1,67 @@
+.status {
+  composes: cell from 'Components/Table/Cells/VirtualTableRowCell.css';
+
+  flex: 0 0 60px;
+}
+
+.sortTitle {
+  composes: cell from 'Components/Table/Cells/VirtualTableRowCell.css';
+
+  flex: 4 0 110px;
+}
+
+.network {
+  composes: cell from 'Components/Table/Cells/VirtualTableRowCell.css';
+
+  flex: 2 0 90px;
+}
+
+.qualityProfileId {
+  composes: cell from 'Components/Table/Cells/VirtualTableRowCell.css';
+
+  flex: 1 0 125px;
+}
+
+.nextAiring,
+.previousAiring,
+.added {
+  composes: cell from 'Components/Table/Cells/VirtualTableRowCell.css';
+
+  flex: 0 0 180px;
+}
+
+.seasonCount {
+  composes: cell from 'Components/Table/Cells/VirtualTableRowCell.css';
+
+  flex: 0 0 100px;
+}
+
+.episodeProgress {
+  composes: cell from 'Components/Table/Cells/VirtualTableRowCell.css';
+
+  flex: 0 0 150px;
+}
+
+.path {
+  composes: cell from 'Components/Table/Cells/VirtualTableRowCell.css';
+
+  flex: 1 0 150px;
+}
+
+.sizeOnDisk {
+  composes: cell from 'Components/Table/Cells/VirtualTableRowCell.css';
+
+  flex: 0 0 110px;
+}
+
+.tags {
+  composes: cell from 'Components/Table/Cells/VirtualTableRowCell.css';
+
+  flex: 1 0 60px;
+}
+
+.actions {
+  composes: cell from 'Components/Table/Cells/VirtualTableRowCell.css';
+
+  flex: 0 0 70px;
+}

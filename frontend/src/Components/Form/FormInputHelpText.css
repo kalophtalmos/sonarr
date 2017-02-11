@@ -1,0 +1,17 @@
+.helpText {
+  margin-top: 5px;
+  color: $helpTextColor;
+  line-height: 20px;
+}
+
+.isError {
+  color: $dangerColor;
+}
+
+.isWarning {
+  color: $warningColor;
+}
+
+.isCheckInput {
+  padding-left: 30px;
+}

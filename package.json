@@ -1,5 +1,5 @@
 {
-  "name": "Sonarr",
+  "name": "sonarr",
   "version": "2.0.0",
   "description": "Sonarr",
   "scripts": {
@@ -52,6 +52,7 @@
     "handlebars": "3.0.3",
     "lodash": "4.17.4",
     "moment": "2.17.1",
+    "mousetrap": "1.6.0",
     "normalize.css": "5.0.0",
     "postcss-loader": "0.9.1",
     "postcss-nested": "1.0.0",

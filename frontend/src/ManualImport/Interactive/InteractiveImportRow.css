@@ -1,0 +1,11 @@
+.relativePath {
+  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+
+  white-space: nowrap;
+}
+
+.quality {
+  composes: cell from 'Components/Table/Cells/TableRowCell.css';
+
+  text-align: center;
+}

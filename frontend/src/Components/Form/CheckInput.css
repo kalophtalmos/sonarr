@@ -1,0 +1,76 @@
+.container {
+  position: relative;
+  display: flex;
+  flex: 1 1 65%;
+}
+
+.label {
+  display: flex;
+  margin-bottom: 0;
+  min-height: 21px;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.checkbox {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+
+  &:global(.isDisabled) {
+    cursor: not-allowed;
+  }
+}
+
+.input {
+  flex: 1 0 auto;
+  margin-top: 7px;
+  margin-right: 5px;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  background-color: $white;
+  color: $white;
+  text-align: center;
+  line-height: 20px;
+}
+
+.checkbox:focus + .input {
+  outline: 0;
+  border-color: $inputFocusBorderColor;
+  box-shadow: inset 0 1px 1px $inputBoxShadowColor, 0 0 8px $inputFocusBoxShadowColor;
+}
+
+.dangerIsChecked {
+  border-color: $dangerColor;
+  background-color: $dangerColor;
+}
+
+.primaryIsChecked {
+  border-color: $primaryColor;
+  background-color: $primaryColor;
+}
+
+.warningIsChecked {
+  border-color: $warningColor;
+  background-color: $warningColor;
+}
+
+.isIndeterminate {
+  border-color: $gray;
+  background-color: $gray;
+}
+
+.helpText {
+  composes: helpText from 'Components/Form/FormInputHelpText.css';
+
+  margin-top: 8px;
+  margin-left: 5px;
+}
+
+.isDisabled {
+  border-color: $disabledCheckInputColor;
+  background-color: $disabledCheckInputColor;
+  cursor: not-allowed;
+}

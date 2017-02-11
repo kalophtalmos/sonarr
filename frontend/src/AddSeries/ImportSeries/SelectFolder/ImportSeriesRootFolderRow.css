@@ -1,0 +1,14 @@
+.link {
+  composes: link from 'Components/Link/Link.css';
+
+  display: block;
+}
+
+.freeSpace,
+.unmappedFolders {
+  width: 150px;
+}
+
+.actions {
+  width: 45px;
+}

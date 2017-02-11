@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <title>Sonarr (Phantom)</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+
+    <!-- Chrome, Opera, and Firefox OS -->
+    <meta name="theme-color" content="#3a3f51"/>
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#3a3f51"/>
+
+    <meta name="description" content="Sonarr (Phantom)">
+
+    <link rel="apple-touch-icon" href="/Content/Images/touch/60.png" data-no-hash />
+    <link rel="apple-touch-icon" sizes="76x76" href="/Content/Images/touch/76.png" data-no-hash />
+    <link rel="apple-touch-icon" sizes="120x120" href="/Content/Images/touch/120.png" data-no-hash />
+    <link rel="apple-touch-icon" sizes="152x152" href="/Content/Images/touch/152.png" data-no-hash />
+    <link rel="mask-icon" href="/Content/Images/safari/logo.svg" color="#35c5f4" data-no-hash >
+    <link rel="icon" type="image/ico" href="/favicon.ico" data-no-hash />
+
+    <link rel="stylesheet" type="text/css" href="/Content/styles.css">
+
+    <!--
+      The super basic styling for .root  will live here,
+      saves fighting with CSS Modules for ~10 lines
+    -->
+    <style>
+      .root {
+        height: 100%; /* needed for proper layout */
+        overflow: hidden;
+      }
+
+      @media only screen and (max-width: 768px) {
+        .root {
+          height: auto;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="root" class="root">
+    </div>
+  </body>
+
+  <div id="notification-region"></div>
+  <div id="modal-region" class="modal fade" tabindex="-1"></div>
+
+  <script type="text/javascript">
+    window.Sonarr = {
+      apiRoot: 'API_ROOT',
+      apiKey: 'API_KEY',
+      release: 'APP_RELEASE',
+      version: 'APP_VERSION',
+      branch: 'APP_BRANCH',
+      analytics: APP_ANALYTICS,
+      urlBase: 'URL_BASE',
+      isProduction: IS_PRODUCTION
+    };
+  </script>
+  <script src="/polyfills.js"></script>
+  <script src="/vendor.js"></script>
+  <script src="/preload.js"></script>
+  <script src="/index.js"></script>
+
+</html>

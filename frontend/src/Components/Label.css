@@ -1,0 +1,55 @@
+.label {
+  display: inline-block;
+  margin: 2px;
+  border-radius: 2px;
+  color: $white;
+  text-align: center;
+  white-space: nowrap;
+  font-weight: bold;
+  line-height: 1;
+  cursor: default;
+}
+
+.default {
+  background-color: $themeLightColor;
+}
+
+.primary {
+  background-color: $primaryColor;
+}
+
+.success {
+  background-color: $successColor;
+}
+
+.warning {
+  background-color: $warningColor;
+}
+
+.danger {
+  background-color: $dangerColor;
+}
+
+.info {
+  background-color: $infoColor;
+}
+
+.inverse {
+  background-color: $gray;
+  color: $defaultColor;
+}
+
+.small {
+  padding: 2px 4px;
+  font-size: 11px;
+}
+
+.medium {
+  padding: 3px 6px;
+  font-size: 12px;
+}
+
+.large {
+  padding: 4px 8px;
+  font-size: 14px;
+}
