@@ -13,7 +13,8 @@ namespace NzbDrone.Core.Download.TrackedDownloads
 {
     public class DownloadMonitoringService : IExecute<CheckForFinishedDownloadCommand>,
                                              IHandle<EpisodeGrabbedEvent>,
-                                             IHandle<EpisodeImportedEvent>
+                                             IHandle<EpisodeImportedEvent>,
+                                             IHandle<TrackedDownloadRemovedEvent>
     {
         private readonly IProvideDownloadClient _downloadClientProvider;
         private readonly IEventAggregator _eventAggregator;
@@ -171,6 +172,13 @@ namespace NzbDrone.Core.Download.TrackedDownloads
         public void Handle(EpisodeImportedEvent message)
         {
             _refreshDebounce.Execute();
+        }
+
+        public void Handle(TrackedDownloadRemovedEvent message)
+        {
+            var trackedDownloads = _trackedDownloadService.GetTrackedDownloads().Where(DownloadIsTrackable).ToList();
+
+            _eventAggregator.PublishEvent(new TrackedDownloadRefreshedEvent(trackedDownloads));
         }
     }
 }
