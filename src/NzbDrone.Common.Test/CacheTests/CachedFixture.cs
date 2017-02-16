@@ -84,6 +84,7 @@ namespace NzbDrone.Common.Test.CacheTests
         }
 
         [Test]
+        [Retry(3)]
         public void should_honor_ttl()
         {
             int hitCount = 0;
