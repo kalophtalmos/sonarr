@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using FluentMigrator.Runner;
 using Marr.Data;
 using NUnit.Framework;
+using NzbDrone.Common.Extensions;
 using NzbDrone.Core.Datastore;
 using NzbDrone.Core.Datastore.Migration.Framework;
 
@@ -17,9 +17,7 @@ namespace NzbDrone.Core.Test.Framework
         private TSubject _subject;
 
         protected BasicRepository<TModel> Storage { get; private set; }
-
         protected IList<TModel> AllStoredModels => Storage.All().ToList();
-
         protected TModel StoredModel => Storage.All().Single();
 
         [SetUp]
@@ -56,7 +54,9 @@ namespace NzbDrone.Core.Test.Framework
             get
             {
                 if (_db == null)
-                    throw new InvalidOperationException("Test object database doesn't exists. Make sure you call WithRealDb() if you intend to use an actual database.");
+                {
+                    throw new InvalidOperationException("Test object database doesn't exist. Make sure you call WithRealDb() if you intend to use an actual database.");
+                }
 
                 return _db;
             }
@@ -64,6 +64,8 @@ namespace NzbDrone.Core.Test.Framework
 
         protected virtual ITestDatabase WithTestDb(MigrationContext migrationContext)
         {
+            VerifyDatabasePath(TestFolderInfo.GetNzbDroneDatabase());
+
             var factory = Mocker.Resolve<DbFactory>();
             var database = factory.Create(migrationContext);
             Mocker.SetConstant(database);
@@ -130,6 +132,23 @@ namespace NzbDrone.Core.Test.Framework
 
                     }
                 }
+            }
+        }
+
+        private void VerifyDatabasePath(string dbPath)
+        {
+            if (File.Exists(dbPath))
+            {
+                TestLogger.Debug("DB File: {0} already exists", dbPath);
+                return;
+            }
+
+            var directory = new FileInfo(dbPath).Directory;
+
+            while (directory != null && !directory.Exists)
+            {
+                TestLogger.Debug("{0} does not exist", directory.FullName);
+                directory = directory.Parent;
             }
         }
     }
