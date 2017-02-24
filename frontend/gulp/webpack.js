@@ -11,7 +11,7 @@ const errorHandler = require('./helpers/errorHandler');
 const reload = require('require-nocache')(module);
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const uiFolder = 'UI.Phantom';
+const uiFolder = 'UI';
 const root = path.join(__dirname, '..', 'src');
 const isProduction = process.argv.indexOf('--production') > -1;
 
